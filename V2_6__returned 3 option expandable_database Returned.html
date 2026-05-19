@@ -1,0 +1,2914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LG Laundry Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #FFFBEB;
+      min-height: 100vh;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      margin-bottom: 0.5em;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 0.2em;
+      color: #D97706;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #A8A29E;
+      font-size: 0.95rem;
+      margin-bottom: 3rem;
+      font-weight: 300;
+    }
+
+    /* Testing Notice */
+    .testing-notice {
+      background: rgba(217, 119, 6, 0.08);
+      border: 1px solid rgba(217, 119, 6, 0.25);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      color: #FFFBEB;
+    }
+
+    .testing-notice strong {
+      color: #F59E0B;
+    }
+
+    .testing-notice em {
+      color: #FCA5A5;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* Voice Button States */
+    .voice-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .voice-button {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 32px rgba(217, 119, 6, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      margin: 0 auto 12px;
+    }
+
+    .voice-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(217, 119, 6, 0.4);
+    }
+
+    .voice-button:active {
+      transform: scale(0.98);
+    }
+
+    .voice-button.listening {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      animation: pulse-listening 1.5s ease-in-out infinite;
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5),
+                  0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+
+    @keyframes pulse-listening {
+      0%, 100% {
+        box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5),
+                    0 0 0 0 rgba(245, 158, 11, 0.4);
+      }
+      50% {
+        box-shadow: 0 8px 40px rgba(245, 158, 11, 0.7),
+                    0 0 0 20px rgba(245, 158, 11, 0);
+      }
+    }
+
+    .voice-button.processing {
+      background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+      cursor: not-allowed;
+    }
+
+    .voice-button.success {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.5);
+    }
+
+    .mic-icon {
+      width: 48px;
+      height: 48px;
+      stroke: #FFFBEB;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .voice-status {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #FFFBEB;
+      margin-top: 4px;
+    }
+
+    .voice-button.listening .voice-status {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .recording-indicator {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 12px;
+      height: 12px;
+      background: #EF4444;
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .voice-button.listening .recording-indicator {
+      opacity: 1;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 251, 235, 0.2);
+      border-top-color: #FFFBEB;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    .voice-button.processing .spinner {
+      display: block;
+    }
+
+    .voice-button.processing .mic-icon,
+    .voice-button.success .mic-icon {
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .checkmark {
+      width: 48px;
+      height: 48px;
+      stroke: #FFFBEB;
+      stroke-width: 3;
+      fill: none;
+      display: none;
+    }
+
+    .voice-button.success .checkmark {
+      display: block;
+    }
+
+    .voice-hint {
+      color: #A8A29E;
+      font-size: 0.85rem;
+      font-weight: 300;
+    }
+
+    /* Manual Input Section */
+    .manual-input-section {
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .input-container {
+      display: flex;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto 8px;
+    }
+
+    .manual-input-field {
+      flex: 1;
+      padding: 14px 18px;
+      background: rgba(217, 119, 6, 0.08);
+      border: 2px solid rgba(217, 119, 6, 0.3);
+      border-radius: 12px;
+      color: #FFFBEB;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .manual-input-field:focus {
+      outline: none;
+      border-color: #D97706;
+      background: rgba(217, 119, 6, 0.12);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+    }
+
+    .manual-input-field::placeholder {
+      color: #78716C;
+    }
+
+    .add-items-btn {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+      border: none;
+      border-radius: 12px;
+      color: #FFFBEB;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2);
+    }
+
+    .add-items-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3);
+    }
+
+    .add-items-btn:active {
+      transform: translateY(0);
+    }
+
+    .manual-input-hint {
+      color: #A8A29E;
+      font-size: 0.85rem;
+      font-weight: 300;
+    }
+
+    /* Transcript Display */
+    .transcript {
+      background: rgba(217, 119, 6, 0.08);
+      border: 2px solid rgba(217, 119, 6, 0.25);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 2rem;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #FFFBEB;
+      font-size: 1.05rem;
+    }
+
+    .transcript.empty {
+      color: #78716C;
+      font-style: italic;
+    }
+
+    /* Quick Add Chips */
+    .chips-section {
+      margin-bottom: 3rem;
+    }
+
+    .chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    .chip {
+      background: rgba(217, 119, 6, 0.1);
+      border: 2px solid rgba(217, 119, 6, 0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .chip:hover {
+      background: rgba(217, 119, 6, 0.2);
+      border-color: #D97706;
+      transform: translateY(-2px);
+    }
+
+    .chip.selected {
+      background: rgba(217, 119, 6, 0.25);
+      border-color: #D97706;
+    }
+
+    /* Chip Buttons */
+    .chip-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(217, 119, 6, 0.3);
+      border: 1px solid #D97706;
+      color: #FFFBEB;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .chip-btn:hover {
+      background: #D97706;
+      transform: scale(1.1);
+    }
+
+    .chip.selected {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chip-content {
+      flex: 1;
+      text-align: center;
+    }
+
+    /* Results Section */
+    .results-section {
+      background: rgba(217, 119, 6, 0.05);
+      border: 2px solid rgba(217, 119, 6, 0.2);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .load-indicator {
+      margin-bottom: 2rem;
+    }
+
+    .load-bar {
+      height: 24px;
+      background: rgba(217, 119, 6, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .load-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #D97706, #F59E0B);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #121212;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .load-warning {
+      color: #EF4444;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    .settings-card {
+      background: rgba(217, 119, 6, 0.08);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .settings-card h3 {
+      color: #F59E0B;
+      margin-bottom: 1rem;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.15);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      color: #A8A29E;
+      font-size: 0.9rem;
+    }
+
+    .setting-value {
+      color: #FFFBEB;
+      font-weight: 600;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-title {
+      color: #EF4444;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .alert-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .alert-list li {
+      padding: 4px 0;
+      color: #FCA5A5;
+    }
+
+    /* Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .tab-button {
+      background: transparent;
+      border: none;
+      color: #A8A29E;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .tab-button:hover {
+      color: #F59E0B;
+    }
+
+    .tab-button.active {
+      color: #D97706;
+      border-bottom-color: #D97706;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Database Table Styles */
+    .database-section {
+      margin-top: 2rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-btn {
+      background: rgba(217, 119, 6, 0.1);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: #FFFBEB;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .filter-btn:hover {
+      background: rgba(217, 119, 6, 0.2);
+    }
+
+    .filter-btn.active {
+      background: #D97706;
+      border-color: #D97706;
+      color: #121212;
+      font-weight: 600;
+    }
+
+    .database-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(217, 119, 6, 0.03);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .database-table th,
+    .database-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.15);
+    }
+
+    .database-table th {
+      background: rgba(217, 119, 6, 0.15);
+      font-weight: 600;
+      color: #F59E0B;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    .database-table tbody tr {
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .database-table tbody tr:hover {
+      background: rgba(217, 119, 6, 0.08);
+    }
+
+    .database-table tbody tr.hidden {
+      display: none;
+    }
+
+    /* Row Number Column */
+    .database-table th:first-child,
+    .database-table td:first-child {
+      width: 60px;
+      text-align: center;
+      color: #78716C;
+      font-weight: 500;
+    }
+
+    /* Expandable Row Styles */
+    .database-table tbody tr.expanded {
+      background: rgba(217, 119, 6, 0.12);
+    }
+
+    .expand-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      margin-right: 8px;
+      color: #D97706;
+    }
+
+    .database-table tbody tr.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .expanded-details {
+      display: none;
+      background: rgba(217, 119, 6, 0.08);
+      border-top: 2px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .expanded-details.show {
+      display: table-row;
+    }
+
+    .expanded-content {
+      padding: 1.5rem;
+    }
+
+    .detail-section {
+      margin-bottom: 1rem;
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-label {
+      color: #F59E0B;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .detail-value {
+      color: #FFFBEB;
+      line-height: 1.6;
+    }
+
+    .synonym-list, .incompatible-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 0.5rem;
+    }
+
+    .synonym-badge, .incompatible-badge {
+      background: rgba(217, 119, 6, 0.2);
+      border: 1px solid rgba(217, 119, 6, 0.4);
+      color: #FFFBEB;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .incompatible-badge {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #FCA5A5;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .category-everyday {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86EFAC;
+    }
+
+    .category-everyday_technical {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93C5FD;
+    }
+
+    .category-jackets {
+      background: rgba(168, 85, 247, 0.2);
+      color: #C4B5FD;
+    }
+
+    .category-towels {
+      background: rgba(245, 158, 11, 0.2);
+      color: #FCD34D;
+    }
+
+    .category-heavy {
+      background: rgba(239, 68, 68, 0.2);
+      color: #FCA5A5;
+    }
+
+    .category-heavy_single {
+      background: rgba(220, 38, 38, 0.2);
+      color: #FCA5A5;
+    }
+
+    .category-delicates {
+      background: rgba(236, 72, 153, 0.2);
+      color: #F9A8D4;
+    }
+
+    .category-bulky {
+      background: rgba(107, 114, 128, 0.2);
+      color: #D1D5DB;
+    }
+
+    .volume-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .volume-bar-fill {
+      flex: 1;
+      height: 8px;
+      background: rgba(217, 119, 6, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .volume-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #D97706, #F59E0B);
+      transition: width 0.3s ease;
+    }
+
+    .volume-percentage {
+      min-width: 45px;
+      text-align: right;
+      font-weight: 500;
+      color: #D97706;
+    }
+
+    .paired-indicator {
+      color: #86EFAC;
+      font-weight: 500;
+    }
+
+    /* Subcategory Dropdown Styles */
+    .chip.has-subcategories {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .chip.has-subcategories::after {
+      content: '▼';
+      font-size: 0.7rem;
+      margin-left: 4px;
+      color: #A8A29E;
+    }
+
+    .subcategory-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #1A1A1A;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 4px;
+      min-width: 200px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .subcategory-dropdown.show {
+      display: block;
+    }
+
+    .subcategory-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .subcategory-item:hover {
+      background: rgba(217, 119, 6, 0.1);
+    }
+
+    .subcategory-item-name {
+      color: #FFFBEB;
+    }
+
+    .subcategory-item-volume {
+      color: #A8A29E;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .database-table {
+        font-size: 0.8rem;
+      }
+
+      .database-table th,
+      .database-table td {
+        padding: 8px 12px;
+      }
+
+      .tabs-nav {
+        gap: 4px;
+      }
+
+      .tab-button {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Add Item Tab Styles */
+    .prompt-section, .input-section, .preview-section {
+      background: rgba(217, 119, 6, 0.05);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .prompt-box {
+      background: #1A1A1A;
+      padding: 1rem;
+      border-radius: 8px;
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    .prompt-box code {
+      color: #86EFAC;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 0.85rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    textarea#jsonInput {
+      width: 100%;
+      background: #1A1A1A;
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: #FFFBEB;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: monospace;
+      margin: 1rem 0;
+      resize: vertical;
+    }
+
+    .action-btn, .copy-btn {
+      background: rgba(217, 119, 6, 0.2);
+      border: 1px solid #D97706;
+      color: #FFFBEB;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover, .copy-btn:hover {
+      background: #D97706;
+      color: #121212;
+    }
+
+    .success-btn {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10B981;
+      margin-top: 1rem;
+    }
+
+    .success-btn:hover {
+      background: #10B981;
+    }
+
+    .preview-card {
+      background: #1A1A1A;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    /* Editable Preview Styles */
+    .edit-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .edit-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .edit-label {
+      color: #F59E0B;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .edit-input {
+      background: #121212;
+      border: 2px solid rgba(217, 119, 6, 0.3);
+      color: #FFFBEB;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .edit-input:focus {
+      outline: none;
+      border-color: #D97706;
+      background: rgba(217, 119, 6, 0.05);
+    }
+
+    .edit-input.error {
+      border-color: #EF4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .error-message {
+      color: #EF4444;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .validation-hint {
+      color: #78716C;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 0.25rem;
+    }
+
+    /* Cycle Cards Grid */
+    .cycles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .cycle-card {
+      background: rgba(217, 119, 6, 0.08);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .cycle-card:hover {
+      border-color: #D97706;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.2);
+    }
+
+    .cycle-card.not-recommended {
+      background: rgba(120, 113, 108, 0.08);
+      border-color: rgba(120, 113, 108, 0.3);
+      opacity: 0.7;
+    }
+
+    .cycle-card.not-recommended:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .cycle-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .cycle-title {
+      font-size: 1.5rem;
+      color: #F59E0B;
+      margin-bottom: 0.25rem;
+    }
+
+    .cycle-subtitle {
+      color: #A8A29E;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .cycle-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .cycle-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .cycle-section h4 {
+      color: #D97706;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .prep-list {
+      list-style-position: inside;
+      color: #FFFBEB;
+      padding-left: 0;
+    }
+
+    .prep-list li {
+      padding: 4px 0;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .cycles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LG Laundry Assistant</h1>
+    <p class="subtitle">Voice-activated cycle recommendations for your 24" compact washer/dryer</p>
+
+    <!-- Tabs Navigation -->
+    <div class="tabs-nav">
+      <button class="tab-button active" data-tab="home">Home</button>
+      <button class="tab-button" data-tab="database">Item Database</button>
+      <button class="tab-button" data-tab="add">Add Item</button>
+    </div>
+
+    <!-- Home Tab -->
+    <div class="tab-content active" id="homeTab">
+      <!-- Testing Instructions (can be removed after testing) -->
+      <div class="testing-notice" id="testingNotice">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0; font-size: 1rem; color: #F59E0B;">🎤 Voice Testing Guide</h3>
+          <button onclick="document.getElementById('testingNotice').style.display='none'" style="background: none; border: none; color: #A8A29E; cursor: pointer; font-size: 1.2rem; padding: 0; line-height: 1;">&times;</button>
+        </div>
+        <p style="margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.5;">
+          <strong>To test voice recognition:</strong><br>
+          1. Click the voice button below<br>
+          2. When you see "Listening..." and the red dot, speak clearly: <em>"I have 3 towels and 2 t-shirts"</em><br>
+          3. Stop speaking and wait for "Processing..." → "Got it!"<br>
+          4. Results will appear automatically
+        </p>
+      </div>
+
+      <!-- Voice Button Section -->
+      <div class="voice-section">
+        <button id="voiceButton" class="voice-button" title="Click to speak">
+          <div class="recording-indicator"></div>
+          <svg class="mic-icon" viewBox="0 0 24 24">
+            <path d="M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+          <div class="spinner"></div>
+          <svg class="checkmark" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span class="voice-status">Tap to Speak</span>
+        </button>
+        <p class="voice-hint">Click the button and tell me what you're washing</p>
+      </div>
+
+      <!-- Manual Text Input -->
+      <div class="manual-input-section">
+        <div class="input-container">
+          <input 
+            type="text" 
+            id="manualInput" 
+            class="manual-input-field" 
+            placeholder="Type what you're washing (e.g., 3 towels, 2 t-shirts)"
+            autocomplete="off"
+          />
+          <button id="addItemsButton" class="add-items-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Items
+          </button>
+        </div>
+        <p class="manual-input-hint">Or type your items and press Enter</p>
+      </div>
+
+      <!-- Transcript Display -->
+      <div id="transcript" class="transcript empty">
+        Your spoken or typed items will appear here
+      </div>
+
+      <!-- Quick Add Section -->
+      <div class="chips-section">
+        <h2>Quick Add Categories</h2>
+        <div id="chipsGrid" class="chips-grid"></div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="results"></div>
+    </div>
+
+    <!-- Database Tab -->
+    <div class="tab-content" id="databaseTab">
+      <div class="database-section">
+        <h2>Item Database</h2>
+        <p class="subtitle" id="databaseSubtitle">All laundry items with volume percentages, categories, and preferred settings</p>
+        
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="everyday">Everyday</button>
+          <button class="filter-btn" data-filter="everyday_technical">Technical</button>
+          <button class="filter-btn" data-filter="jackets">Jackets</button>
+          <button class="filter-btn" data-filter="towels">Towels</button>
+          <button class="filter-btn" data-filter="heavy">Heavy</button>
+          <button class="filter-btn" data-filter="delicates">Delicates</button>
+          <button class="filter-btn" data-filter="bulky">Bulky</button>
+        </div>
+
+        <table id="databaseTable" class="database-table"></table>
+      </div>
+    </div>
+
+    <!-- Add Item Tab -->
+    <div class="tab-content" id="addTab">
+      <div class="prompt-section">
+        <h3>1. Copy This Prompt</h3>
+        <p>Use Claude or Gemini to create a properly formatted laundry item. Copy the prompt below and describe your item.</p>
+        <div class="prompt-box">
+          <code id="masterPrompt">You are a laundry assistant helping me add a new item to my database. Based on my description, return ONLY valid JSON (no markdown, no explanation) with these fields:
+
+{
+  "name": "Item Name",
+  "category": "everyday|everyday_technical|jackets|towels|heavy|heavy_single|bulky|delicates",
+  "volume": 0.01-1.0,
+  "synonyms": ["array", "of", "terms"],
+  "incompatible": ["optional_item_keys"]
+}
+
+**Volume Guidelines:**
+- Small items (underwear, socks): 0.03-0.05
+- Medium items (t-shirts, blouses): 0.05-0.10
+- Large items (jeans, sweaters): 0.10-0.20
+- Very large items (jackets, towels): 0.20-0.50
+
+**Categories:**
+- everyday: Regular cotton clothes
+- everyday_technical: Synthetic athletic/performance wear
+- jackets: Outerwear & coats
+- towels: Bath & beach towels
+- heavy: Denim jeans
+- heavy_single: Single heavy items (winter coat, bathrobe)
+- bulky: Bedding, blankets, comforters
+- delicates: Silk, lace, lingerie
+
+**Example (Nylon Jacket):**
+{
+  "name": "Activewear Jacket",
+  "category": "everyday_technical",
+  "volume": 0.15,
+  "synonyms": ["nylon jacket", "activewear jacket", "windbreaker"],
+  "incompatible": ["towels", "heavy_jacket"]
+}</code>
+          <button onclick="copyPrompt()" class="copy-btn">Copy Prompt</button>
+        </div>
+      </div>
+
+      <div class="input-section">
+        <h3>2. Paste AI Output (JSON)</h3>
+        <textarea id="jsonInput" rows="8" placeholder="Paste the JSON here..."></textarea>
+        <button onclick="previewItem()" class="action-btn">Preview Settings</button>
+      </div>
+
+      <div id="previewSection" class="preview-section" style="display: none;">
+        <h3>3. Preview & Edit</h3>
+        <p style="color: #A8A29E; margin-bottom: 1rem;">Review and modify the fields below. Invalid values will be highlighted in red.</p>
+        <div id="previewContent" class="preview-card">
+          <div class="edit-grid">
+            <div class="edit-field">
+              <label class="edit-label">Item Key</label>
+              <input type="text" id="editKey" class="edit-input" readonly />
+              <span class="validation-hint">Auto-generated from name</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Name</label>
+              <input type="text" id="editName" class="edit-input" />
+              <span class="error-message" id="errorName">Name is required</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Category</label>
+              <select id="editCategory" class="edit-input">
+                <option value="">Select a category</option>
+                <option value="everyday">Everyday</option>
+                <option value="everyday_technical">Technical/Athletic</option>
+                <option value="jackets">Jackets</option>
+                <option value="towels">Towels</option>
+                <option value="heavy">Heavy (Denim)</option>
+                <option value="heavy_single">Heavy Single</option>
+                <option value="bulky">Bulky</option>
+                <option value="delicates">Delicates</option>
+              </select>
+              <span class="error-message" id="errorCategory">Please select a valid category</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Volume (0.01 - 1.0)</label>
+              <input type="number" id="editVolume" class="edit-input" step="0.01" min="0.01" max="1.0" />
+              <span class="error-message" id="errorVolume">Volume must be between 0.01 and 1.0</span>
+              <span class="validation-hint">Small: 0.03-0.05 | Medium: 0.05-0.10 | Large: 0.10-0.20 | XL: 0.20-0.50</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Synonyms (comma-separated)</label>
+              <input type="text" id="editSynonyms" class="edit-input" placeholder="e.g., t-shirt, tshirt, tee" />
+              <span class="validation-hint">Separate each synonym with a comma</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Incompatible Items (comma-separated keys)</label>
+              <input type="text" id="editIncompatible" class="edit-input" placeholder="e.g., jeans, bath_towel" />
+              <span class="validation-hint">Optional - item keys that shouldn't be washed together</span>
+            </div>
+          </div>
+        </div>
+        <button onclick="saveCustomItem()" class="action-btn success-btn">Save to Local Database</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // LAUNDRY DATA & CONFIGURATION
+    // ========================================
+
+    const LAUNDRY_DATA = {
+      items: {
+        // TOPS - Tank Tops & Sleeveless
+        tank_top: {
+          name: 'Tank Top',
+          category: 'everyday',
+          volume: 0.03,
+          isPaired: false,
+          synonyms: ['tank top', 'tank', 'camisole', 'cami', 'sleeveless shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - T-Shirts
+        tshirt: {
+          name: 'T-Shirt',
+          category: 'everyday',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['t-shirt', 'tshirt', 't shirt', 'tee shirt', 'tee', 'shirt', 'short sleeve shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - Long-Sleeve Shirts
+        long_sleeve: {
+          name: 'Long-Sleeve Shirt',
+          category: 'everyday',
+          volume: 0.07,
+          isPaired: false,
+          synonyms: ['long sleeve', 'long-sleeve', 'longsleeve', 'ls shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - Polo Shirts
+        polo: {
+          name: 'Polo Shirt',
+          category: 'everyday',
+          volume: 0.06,
+          isPaired: false,
+          synonyms: ['polo', 'polo shirt', 'collared shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - Button-Up Shirts
+        button_up: {
+          name: 'Button-Up Shirt',
+          category: 'everyday',
+          volume: 0.08,
+          isPaired: false,
+          synonyms: ['button-up', 'button up', 'dress shirt', 'oxford shirt', 'business shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - Blouse
+        blouse: {
+          name: 'Blouse',
+          category: 'everyday',
+          volume: 0.07,
+          isPaired: false,
+          synonyms: ['blouse', 'top', 'womens shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // TOPS - Sweaters & Hoodies
+        sweater_light: {
+          name: 'Light Sweater',
+          category: 'everyday',
+          volume: 0.10,
+          isPaired: false,
+          synonyms: ['sweater', 'pullover', 'jumper', 'cardigan'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        hoodie: {
+          name: 'Hoodie',
+          category: 'everyday',
+          volume: 0.12,
+          isPaired: false,
+          synonyms: ['hoodie', 'hoody', 'sweatshirt', 'zip-up', 'zipup', 'pullover hoodie'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        sweater_heavy: {
+          name: 'Heavy Sweater',
+          category: 'everyday',
+          volume: 0.15,
+          isPaired: false,
+          synonyms: ['heavy sweater', 'thick sweater', 'wool sweater', 'knit sweater'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Underwear
+        underwear: {
+          name: 'Underwear',
+          category: 'everyday',
+          volume: 0.03,
+          isPaired: false,
+          synonyms: ['underwear', 'boxers', 'briefs', 'panties', 'undies', 'boxer briefs', 'boy shorts'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Socks (PAIRED ITEM)
+        sock: {
+          name: 'Sock',
+          category: 'everyday',
+          volume: 0.03,
+          isPaired: true,
+          pairMultiplier: 2,
+          displayAs: 'pair',
+          synonyms: ['sock', 'socks'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Shorts
+        shorts: {
+          name: 'Shorts',
+          category: 'everyday',
+          volume: 0.04,
+          isPaired: false,
+          synonyms: ['shorts', 'gym shorts', 'athletic shorts', 'running shorts', 'basketball shorts', 'cargo shorts'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Leggings
+        leggings: {
+          name: 'Leggings',
+          category: 'everyday',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['leggings', 'yoga pants', 'tights'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Sweatpants
+        sweatpants: {
+          name: 'Sweatpants',
+          category: 'everyday',
+          volume: 0.08,
+          isPaired: false,
+          synonyms: ['sweatpants', 'joggers', 'track pants', 'lounge pants'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // BOTTOMS - Dress Pants
+        dress_pants: {
+          name: 'Dress Pants',
+          category: 'everyday',
+          volume: 0.09,
+          isPaired: false,
+          synonyms: ['dress pants', 'slacks', 'trousers', 'khakis', 'chinos'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // ATHLETIC WEAR
+        athletic_shirt: {
+          name: 'Athletic Shirt',
+          category: 'everyday_technical',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['athletic shirt', 'workout shirt', 'gym shirt', 'performance tee', 'dri-fit shirt', 'moisture wicking shirt'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        athletic_shorts: {
+          name: 'Athletic Shorts',
+          category: 'everyday_technical',
+          volume: 0.04,
+          isPaired: false,
+          synonyms: ['athletic shorts', 'workout shorts', 'gym shorts', 'running shorts', 'sport shorts'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        athletic_leggings: {
+          name: 'Athletic Leggings',
+          category: 'everyday_technical',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['athletic leggings', 'workout leggings', 'compression pants', 'performance leggings'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        sports_bra: {
+          name: 'Sports Bra',
+          category: 'everyday_technical',
+          volume: 0.04,
+          isPaired: false,
+          synonyms: ['sports bra', 'athletic bra', 'workout bra'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // DRESSES & SKIRTS
+        dress_light: {
+          name: 'Light Dress',
+          category: 'everyday',
+          volume: 0.08,
+          isPaired: false,
+          synonyms: ['dress', 'sundress', 'light dress', 'summer dress'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        dress_heavy: {
+          name: 'Heavy Dress',
+          category: 'everyday',
+          volume: 0.12,
+          isPaired: false,
+          synonyms: ['heavy dress', 'winter dress', 'long dress', 'maxi dress'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        skirt: {
+          name: 'Skirt',
+          category: 'everyday',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['skirt', 'mini skirt', 'midi skirt', 'maxi skirt'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // JEANS
+        jeans: {
+          name: 'Jeans',
+          category: 'heavy',
+          volume: 0.15,
+          isPaired: false,
+          synonyms: ['jeans', 'denim', 'blue jeans', 'denim pants'],
+          incompatible: ['underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shorts', 'athletic_leggings', 'dress_light', 'dress_heavy', 'skirt', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // JACKETS
+        light_jacket: {
+          name: 'Light Jacket',
+          category: 'jackets',
+          volume: 0.18,
+          isPaired: false,
+          synonyms: ['jacket', 'light jacket', 'windbreaker', 'spring jacket'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe']
+        },
+
+        heavy_jacket: {
+          name: 'Heavy Jacket',
+          category: 'heavy_single',
+          volume: 0.35,
+          isPaired: false,
+          synonyms: ['heavy jacket', 'winter jacket', 'parka', 'puffer jacket', 'down jacket'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        winter_coat: {
+          name: 'Winter Coat',
+          category: 'heavy_single',
+          volume: 0.40,
+          isPaired: false,
+          synonyms: ['winter coat', 'overcoat', 'trench coat', 'wool coat'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        // TOWELS
+        hand_towel: {
+          name: 'Hand Towel',
+          category: 'towels',
+          volume: 0.08,
+          isPaired: false,
+          synonyms: ['hand towel', 'small towel', 'guest towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat']
+        },
+
+        bath_towel: {
+          name: 'Bath Towel',
+          category: 'towels',
+          volume: 0.25,
+          isPaired: false,
+          synonyms: ['bath towel', 'towel', 'body towel', 'large towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        beach_towel: {
+          name: 'Beach Towel',
+          category: 'towels',
+          volume: 0.30,
+          isPaired: false,
+          synonyms: ['beach towel', 'pool towel', 'extra large towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        washcloth: {
+          name: 'Washcloth',
+          category: 'towels',
+          volume: 0.03,
+          isPaired: false,
+          synonyms: ['washcloth', 'wash cloth', 'facecloth', 'face cloth'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat']
+        },
+
+        bathrobe: {
+          name: 'Bathrobe',
+          category: 'heavy_single',
+          volume: 0.40,
+          isPaired: false,
+          synonyms: ['bathrobe', 'robe', 'terry robe', 'bath robe'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'hand_towel', 'bath_towel', 'beach_towel', 'washcloth', 'light_jacket', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        // BEDDING
+        sheet_twin: {
+          name: 'Twin Sheet',
+          category: 'bulky',
+          volume: 0.20,
+          isPaired: false,
+          synonyms: ['twin sheet', 'twin bed sheet', 'single sheet'],
+          incompatible: []
+        },
+
+        sheet_full: {
+          name: 'Full Sheet',
+          category: 'bulky',
+          volume: 0.25,
+          isPaired: false,
+          synonyms: ['full sheet', 'double sheet', 'full bed sheet'],
+          incompatible: []
+        },
+
+        sheet_queen: {
+          name: 'Queen Sheet',
+          category: 'bulky',
+          volume: 0.30,
+          isPaired: false,
+          synonyms: ['queen sheet', 'queen bed sheet'],
+          incompatible: ['heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_heavy']
+        },
+
+        sheet_king: {
+          name: 'King Sheet',
+          category: 'bulky',
+          volume: 0.35,
+          isPaired: false,
+          synonyms: ['king sheet', 'king bed sheet'],
+          incompatible: ['heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_heavy']
+        },
+
+        pillowcase: {
+          name: 'Pillowcase',
+          category: 'bulky',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['pillowcase', 'pillow case', 'pillowcases'],
+          incompatible: []
+        },
+
+        duvet_cover: {
+          name: 'Duvet Cover',
+          category: 'bulky',
+          volume: 0.45,
+          isPaired: false,
+          synonyms: ['duvet cover', 'duvet', 'comforter cover'],
+          incompatible: ['bath_towel', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat', 'sheet_queen', 'sheet_king']
+        },
+
+        blanket_light: {
+          name: 'Light Blanket',
+          category: 'bulky',
+          volume: 0.30,
+          isPaired: false,
+          synonyms: ['blanket', 'throw blanket', 'light blanket'],
+          incompatible: ['bath_towel', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        blanket_heavy: {
+          name: 'Heavy Blanket',
+          category: 'bulky',
+          volume: 0.45,
+          isPaired: false,
+          synonyms: ['heavy blanket', 'thick blanket', 'quilt'],
+          incompatible: ['bath_towel', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat', 'sheet_queen', 'sheet_king', 'duvet_cover']
+        },
+
+        // DELICATES
+        silk_blouse: {
+          name: 'Silk Blouse',
+          category: 'delicates',
+          volume: 0.07,
+          isPaired: false,
+          synonyms: ['silk blouse', 'silk top', 'silk shirt'],
+          incompatible: []
+        },
+
+        bra: {
+          name: 'Bra',
+          category: 'delicates',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['bra', 'bras', 'brassiere'],
+          incompatible: []
+        },
+
+        lace_underwear: {
+          name: 'Lace Underwear',
+          category: 'delicates',
+          volume: 0.03,
+          isPaired: false,
+          synonyms: ['lace underwear', 'lace panties', 'lace lingerie'],
+          incompatible: []
+        }
+      },
+
+      cycleTemplates: {
+        everyday: {
+          optimal: {
+            dial: 'Cotton/Normal',
+            temp: 'Warm',
+            spin: 'High',
+            dry: 'Normal',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Sort by color', '3-4 wool dryer balls', 'Check pockets']
+          },
+          extraDry: {
+            dial: 'Cotton/Normal',
+            temp: 'Warm',
+            spin: 'High',
+            dry: 'Normal Eco',
+            maxLoad: 0.4,
+            detergent: '1 tbsp HE powder',
+            prep: ['Sort by color', '3-4 wool dryer balls', 'Shake items before loading']
+          },
+          quick: {
+            dial: 'Speed Wash',
+            temp: 'Warm',
+            spin: 'Extra High',
+            dry: 'Time Dry: 60 min',
+            maxLoad: 0.15,
+            detergent: '1/2 tsp HE powder',
+            prep: ['Lightly soiled only', '3-4 wool dryer balls']
+          }
+        },
+        towels: {
+          optimal: {
+            dial: 'Heavy Duty',
+            temp: 'Hot',
+            spin: 'High',
+            dry: 'Normal',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['1/4 cup white vinegar in softener slot', '3-4 wool dryer balls', 'Shake towels before loading']
+          },
+          extraDry: {
+            dial: 'Heavy Duty',
+            temp: 'Hot',
+            spin: 'High',
+            dry: 'Time Dry: 120 min',
+            maxLoad: 0.3,
+            detergent: '1 tbsp HE powder',
+            prep: ['1/4 cup white vinegar', '3-4 wool dryer balls', 'Add Extra Rinse option']
+          },
+          quick: {
+            recommended: false,
+            reason: 'Towels are too absorbent for quick drying cycles'
+          }
+        },
+        heavy: {
+          optimal: {
+            dial: 'Heavy Duty',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Normal',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn jeans inside out', 'Add Extra Rinse option', '3-4 wool dryer balls']
+          },
+          extraDry: {
+            dial: 'Heavy Duty',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 90 min',
+            maxLoad: 0.25,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn inside out', 'Add 20-30 min for waistbands', '3-4 wool dryer balls']
+          },
+          quick: {
+            recommended: false,
+            reason: 'Heavy denim has high water retention and cannot speed dry'
+          }
+        },
+        heavy_single: {
+          optimal: {
+            dial: 'Heavy Duty',
+            temp: 'Warm',
+            spin: 'High',
+            dry: 'Normal',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Wash item completely alone', '3-4 wool dryer balls', 'Check for loose buttons']
+          },
+          extraDry: {
+            dial: 'Heavy Duty',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 120 min',
+            maxLoad: 0.4,
+            detergent: '1 tbsp HE powder',
+            prep: ['Wash alone to prevent UE errors', 'Medium spin prevents machine walking', '3-4 wool dryer balls']
+          },
+          quick: {
+            recommended: false,
+            reason: 'Single heavy items need full wash/dry cycles'
+          }
+        },
+        bulky: {
+          optimal: {
+            dial: 'Bulky/Large',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 90 min',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Shake out before loading', '3-4 wool dryer balls', 'Pause at 45 min to untangle']
+          },
+          extraDry: {
+            dial: 'Bulky/Large',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 120 min',
+            maxLoad: 0.4,
+            detergent: '1 tbsp HE powder',
+            prep: ['Shake thoroughly', 'Pause at 60 min to untangle burrito', '3-4 wool dryer balls']
+          },
+          quick: {
+            recommended: false,
+            reason: 'Bulky items ball up and need manual intervention'
+          }
+        },
+        delicates: {
+          optimal: {
+            dial: 'Delicates',
+            temp: 'Cold',
+            spin: 'Low',
+            dry: 'Low/Air Dry',
+            maxLoad: 0.3,
+            detergent: '1 tbsp gentle/delicate detergent',
+            prep: ['Use mesh laundry bags', 'Fasten all hooks', 'Do not overstuff']
+          },
+          extraDry: {
+            dial: 'Delicates',
+            temp: 'Cold',
+            spin: 'Low',
+            dry: 'Time Dry: 30 min Low',
+            maxLoad: 0.2,
+            detergent: '1 tbsp gentle/delicate detergent',
+            prep: ['Use mesh laundry bags', 'Fasten all hooks', 'Air dry recommended']
+          },
+          quick: {
+            dial: 'Delicates',
+            temp: 'Cold',
+            spin: 'Low',
+            dry: 'Air Dry',
+            maxLoad: 0.15,
+            detergent: '1/2 tsp gentle detergent',
+            prep: ['Mesh bags required', 'Very light soil only']
+          }
+        },
+        jackets: {
+          optimal: {
+            dial: 'Perm Press',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 60 min',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Zip all zippers', 'Fasten all snaps', '3-4 wool dryer balls']
+          },
+          extraDry: {
+            dial: 'Perm Press',
+            temp: 'Warm',
+            spin: 'Medium',
+            dry: 'Time Dry: 90 min',
+            maxLoad: 0.3,
+            detergent: '1 tbsp HE powder',
+            prep: ['Zip all zippers', 'Pause at 45 min to shake out', '3-4 wool dryer balls']
+          },
+          quick: {
+            recommended: false,
+            reason: 'Jackets need gentle care and adequate drying time'
+          }
+        },
+        everyday_technical: {
+          optimal: {
+            dial: 'Cotton/Normal',
+            temp: 'Cold',
+            spin: 'High',
+            dry: 'Low/Med',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn inside out', 'No fabric softener', '3-4 wool dryer balls']
+          },
+          extraDry: {
+            dial: 'Cotton/Normal',
+            temp: 'Cold',
+            spin: 'High',
+            dry: 'Time Dry: 60 min Low',
+            maxLoad: 0.4,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn inside out', 'Avoid high heat', '3-4 wool dryer balls']
+          },
+          quick: {
+            dial: 'Speed Wash',
+            temp: 'Cold',
+            spin: 'Extra High',
+            dry: 'Time Dry: 40 min Low',
+            maxLoad: 0.15,
+            detergent: '1/2 tsp HE powder',
+            prep: ['Lightly soiled only', 'No fabric softener']
+          }
+        }
+      }
+    };
+
+    // Quick Add Categories
+    const QUICK_ADD_CATEGORIES = {
+      'Shirts': ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse'],
+      'Sweaters': ['sweater_light', 'hoodie', 'sweater_heavy'],
+      'Pants': ['shorts', 'leggings', 'sweatpants', 'dress_pants', 'jeans'],
+      'Dresses & Skirts': ['dress_light', 'dress_heavy', 'skirt'],
+      'Jackets': ['light_jacket', 'heavy_jacket', 'winter_coat'],
+      'Underwear & Socks': ['underwear', 'sock'],
+      'Athletic': ['athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra'],
+      'Towels': ['hand_towel', 'bath_towel', 'beach_towel', 'washcloth', 'bathrobe'],
+      'Bedding': ['sheet_twin', 'sheet_full', 'sheet_queen', 'sheet_king', 'pillowcase', 'duvet_cover', 'blanket_light', 'blanket_heavy'],
+      'Delicates': ['silk_blouse', 'bra', 'lace_underwear']
+    };
+
+    // Valid categories for dropdown
+    const VALID_CATEGORIES = [
+      'everyday',
+      'everyday_technical',
+      'jackets',
+      'towels',
+      'heavy',
+      'heavy_single',
+      'bulky',
+      'delicates'
+    ];
+
+    // ========================================
+    // STATE
+    // ========================================
+    
+    let selectedItems = [];
+    let SYNONYM_DATABASE = {};
+
+    // ========================================
+    // TAB MANAGEMENT
+    // ========================================
+
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const targetTab = button.dataset.tab;
+          
+          // Remove active from all buttons and contents
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active to clicked button and corresponding content
+          button.classList.add('active');
+          const targetContent = document.getElementById(`${targetTab}Tab`);
+          if (targetContent) {
+            targetContent.classList.add('active');
+          }
+          
+          // If switching to database tab, render the table
+          if (targetTab === 'database') {
+            renderDatabaseTable();
+          }
+        });
+      });
+    }
+
+    // ========================================
+    // VOICE RECOGNITION
+    // ========================================
+
+    let recognition = null;
+    let isListening = false;
+
+    function initVoiceRecognition() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        console.warn('Speech recognition not supported');
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        console.log('Voice recognition started');
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('Recognized:', transcript);
+        handleVoiceResult(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        resetVoiceButton();
+      };
+
+      recognition.onend = () => {
+        console.log('Voice recognition ended');
+        isListening = false;
+      };
+
+      // Build synonym database for faster lookups
+      SYNONYM_DATABASE = buildSynonymDatabase();
+    }
+
+    function buildSynonymDatabase() {
+      const db = {};
+      
+      Object.entries(LAUNDRY_DATA.items).forEach(([itemKey, itemData]) => {
+        if (itemData.synonyms) {
+          itemData.synonyms.forEach(synonym => {
+            const normalizedSynonym = synonym.toLowerCase().trim();
+            db[normalizedSynonym] = itemKey;
+          });
+        }
+      });
+      
+      return db;
+    }
+
+    function startVoiceRecognition() {
+      if (!recognition || isListening) return;
+      
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('success');
+      button.classList.add('listening');
+      button.querySelector('.voice-status').textContent = 'Listening...';
+      
+      isListening = true;
+      recognition.start();
+    }
+
+    function handleVoiceResult(transcript) {
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('listening');
+      button.classList.add('processing');
+      button.querySelector('.voice-status').textContent = 'Processing...';
+      
+      displayTranscript(transcript);
+      parseAndAddItems(transcript);
+      
+      setTimeout(() => {
+        button.classList.remove('processing');
+        button.classList.add('success');
+        button.querySelector('.voice-status').textContent = 'Got it!';
+        
+        setTimeout(() => {
+          resetVoiceButton();
+        }, 1500);
+      }, 800);
+    }
+
+    function resetVoiceButton() {
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('listening', 'processing', 'success');
+      button.querySelector('.voice-status').textContent = 'Tap to Speak';
+    }
+
+    // ========================================
+    // MANUAL TEXT INPUT
+    // ========================================
+
+    function handleManualInput() {
+      const input = document.getElementById('manualInput');
+      const text = input.value.trim();
+      
+      if (!text) return;
+      
+      displayTranscript(text);
+      parseAndAddItems(text);
+      
+      input.value = '';
+    }
+
+    // ========================================
+    // ITEM PARSING & MANAGEMENT
+    // ========================================
+
+    function parseAndAddItems(text) {
+      const lowerText = text.toLowerCase();
+      
+      // Detect "pairs" keyword for paired items
+      const hasPairsKeyword = /\b(\d+)\s*(pairs?\s+of)\s+(\w+)/i.test(text);
+      
+      // Extract quantity and item patterns
+      const patterns = [
+        /\b(\d+)\s*(pairs?\s+of)?\s+([a-z\s-]+?)(?=\s+and\b|\s*,|\s*$)/gi,
+        /\b([a-z\s-]+?)\s*\((\d+)\)/gi
+      ];
+      
+      let foundItems = [];
+      
+      patterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.exec(lowerText)) !== null) {
+          let quantity, itemName;
+          
+          if (match[2]) {
+            quantity = parseInt(match[1]);
+            itemName = match[3].trim();
+          } else if (match.length === 3 && !isNaN(match[1])) {
+            quantity = parseInt(match[1]);
+            itemName = match[3] || match[2];
+            if (itemName) itemName = itemName.trim();
+          } else {
+            itemName = match[1].trim();
+            quantity = parseInt(match[2]) || 1;
+          }
+          
+          if (itemName) {
+            foundItems.push({ quantity, itemName, hasPairsKeyword: hasPairsKeyword && match[2] });
+          }
+        }
+      });
+      
+      // Match items against synonym database
+      foundItems.forEach(({ quantity, itemName, hasPairsKeyword }) => {
+        const itemKey = SYNONYM_DATABASE[itemName];
+        
+        if (itemKey) {
+          const existingItem = selectedItems.find(item => item.item === itemKey);
+          const itemData = LAUNDRY_DATA.items[itemKey];
+          
+          if (existingItem) {
+            if (hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+              const actualQuantity = quantity * itemData.pairMultiplier;
+              existingItem.quantity += actualQuantity;
+              existingItem.displayQuantity = (existingItem.displayQuantity || (existingItem.quantity / itemData.pairMultiplier)) + quantity;
+              existingItem.hasPairsKeyword = true;
+            } else {
+              existingItem.quantity += quantity;
+            }
+          } else {
+            if (hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+              const actualQuantity = quantity * itemData.pairMultiplier;
+              selectedItems.push({
+                item: itemKey,
+                quantity: actualQuantity,
+                displayQuantity: quantity,
+                hasPairsKeyword: true
+              });
+            } else {
+              selectedItems.push({
+                item: itemKey,
+                quantity: quantity,
+                hasPairsKeyword: false
+              });
+            }
+          }
+        }
+      });
+      
+      updateChipsDisplay();
+      generateResults();
+    }
+
+    function checkIncompatibilities() {
+      const incompatibilities = [];
+      
+      for (let i = 0; i < selectedItems.length; i++) {
+        for (let j = i + 1; j < selectedItems.length; j++) {
+          const item1 = LAUNDRY_DATA.items[selectedItems[i].item];
+          const item2Key = selectedItems[j].item;
+          
+          if (item1.incompatible && item1.incompatible.includes(item2Key)) {
+            incompatibilities.push({
+              item1: item1.name,
+              item2: LAUNDRY_DATA.items[item2Key].name
+            });
+          }
+        }
+      }
+      
+      return incompatibilities;
+    }
+
+    function displayTranscript(text) {
+      const transcriptEl = document.getElementById('transcript');
+      transcriptEl.textContent = text;
+      transcriptEl.classList.remove('empty');
+    }
+
+    function renderChips() {
+      const chipsGrid = document.getElementById('chipsGrid');
+      chipsGrid.innerHTML = '';
+
+      // Render category chips
+      Object.entries(QUICK_ADD_CATEGORIES).forEach(([categoryName, itemKeys]) => {
+        const chip = document.createElement('div');
+        chip.className = 'chip has-subcategories';
+        chip.textContent = categoryName;
+        
+        // Create and append dropdown
+        const dropdown = createSubcategoryDropdown(categoryName, itemKeys);
+        chip.appendChild(dropdown);
+        
+        // Toggle dropdown on click
+        chip.addEventListener('click', (e) => {
+          e.stopPropagation();
+          
+          // Close other dropdowns
+          if (activeDropdown && activeDropdown !== dropdown) {
+            activeDropdown.classList.remove('show');
+          }
+          
+          // Toggle current dropdown
+          dropdown.classList.toggle('show');
+          activeDropdown = dropdown.classList.contains('show') ? dropdown : null;
+        });
+        
+        chipsGrid.appendChild(chip);
+      });
+      
+      // Add selected items chips at the end
+      if (selectedItems.length > 0) {
+        // Add separator
+        const separator = document.createElement('div');
+        separator.style.width = '100%';
+        separator.style.borderTop = '1px solid rgba(217, 119, 6, 0.2)';
+        separator.style.margin = '12px 0';
+        chipsGrid.appendChild(separator);
+        
+        const selectedHeader = document.createElement('div');
+        selectedHeader.style.width = '100%';
+        selectedHeader.style.color = '#A8A29E';
+        selectedHeader.style.fontSize = '0.875rem';
+        selectedHeader.style.marginBottom = '8px';
+        selectedHeader.textContent = 'Selected Items:';
+        chipsGrid.appendChild(selectedHeader);
+        
+        // Render selected item chips
+        selectedItems.forEach(selected => {
+          const item = LAUNDRY_DATA.items[selected.item];
+          const chip = document.createElement('div');
+          chip.className = 'chip selected';
+          chip.dataset.item = selected.item;
+          
+          // Determine display text based on pairs logic
+          let displayText = item.name;
+          let quantityDisplay = selected.quantity;
+          
+          if (selected.hasPairsKeyword && item.isPaired && item.displayAs === 'pair') {
+            // Show as pairs (e.g., "3 pairs" for 6 socks)
+            quantityDisplay = selected.displayQuantity || (selected.quantity / item.pairMultiplier);
+            displayText = `${item.name} (${quantityDisplay} ${quantityDisplay === 1 ? 'pair' : 'pairs'})`;
+          } else {
+            // Show regular quantity
+            displayText = `${item.name} (${quantityDisplay})`;
+          }
+          
+          // Create chip structure with controls
+          chip.innerHTML = `
+            <button class="chip-btn decrement" data-item="${selected.item}" title="Decrease quantity">−</button>
+            <div class="chip-content">
+              <div>${displayText}</div>
+            </div>
+            <button class="chip-btn increment" data-item="${selected.item}" title="Increase quantity">+</button>
+          `;
+          
+          // Add event listeners to buttons
+          chip.querySelector('.decrement').addEventListener('click', (e) => {
+            e.stopPropagation();
+            decrementItem(selected.item);
+          });
+          
+          chip.querySelector('.increment').addEventListener('click', (e) => {
+            e.stopPropagation();
+            incrementItem(selected.item);
+          });
+          
+          // Main chip click removes item
+          chip.addEventListener('click', () => removeItem(selected.item));
+          
+          chipsGrid.appendChild(chip);
+        });
+      }
+    }
+
+    function addItem(itemKey) {
+      selectedItems.push({ item: itemKey, quantity: 1 });
+      updateChipsDisplay();
+      generateResults();
+    }
+
+    function removeItem(itemKey) {
+      selectedItems = selectedItems.filter(item => item.item !== itemKey);
+      updateChipsDisplay();
+      generateResults();
+    }
+
+    function incrementItem(itemKey) {
+      const item = selectedItems.find(s => s.item === itemKey);
+      if (item) {
+        const itemData = LAUNDRY_DATA.items[itemKey];
+        
+        // If it's a paired item shown as pairs, increment by the multiplier
+        if (item.hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+          item.quantity += itemData.pairMultiplier;
+          item.displayQuantity = (item.displayQuantity || (item.quantity / itemData.pairMultiplier)) + 1;
+        } else {
+          item.quantity++;
+        }
+        
+        updateChipsDisplay();
+        generateResults();
+      }
+    }
+
+    function decrementItem(itemKey) {
+      const item = selectedItems.find(s => s.item === itemKey);
+      if (item) {
+        const itemData = LAUNDRY_DATA.items[itemKey];
+        
+        // If it's a paired item shown as pairs, decrement by the multiplier
+        if (item.hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+          const decrementAmount = itemData.pairMultiplier;
+          if (item.quantity > decrementAmount) {
+            item.quantity -= decrementAmount;
+            item.displayQuantity = (item.displayQuantity || (item.quantity / itemData.pairMultiplier)) - 1;
+          } else {
+            // If quantity would go to 0 or below, remove the item
+            selectedItems = selectedItems.filter(s => s.item !== itemKey);
+          }
+        } else {
+          if (item.quantity > 1) {
+            item.quantity--;
+          } else {
+            // If quantity would go to 0, remove the item
+            selectedItems = selectedItems.filter(s => s.item !== itemKey);
+          }
+        }
+        
+        updateChipsDisplay();
+        generateResults();
+      }
+    }
+
+    function updateChipsDisplay() {
+      renderChips();
+    }
+
+    // ========================================
+    // RESULTS GENERATION
+    // ========================================
+
+    function generateResults() {
+      if (selectedItems.length === 0) {
+        document.getElementById('results').innerHTML = '';
+        return;
+      }
+
+      // Calculate total drum load
+      const totalLoad = selectedItems.reduce((sum, item) => {
+        return sum + (LAUNDRY_DATA.items[item.item].volume * item.quantity);
+      }, 0);
+
+      // Determine category (most restrictive)
+      const categoryPriority = ['heavy_single', 'delicates', 'bulky', 'towels', 'jackets', 'heavy', 'everyday_technical', 'everyday'];
+      let category = 'everyday';
+      
+      for (const priority of categoryPriority) {
+        if (selectedItems.some(item => LAUNDRY_DATA.items[item.item].category === priority)) {
+          category = priority;
+          break;
+        }
+      }
+
+      // Check for incompatibilities
+      const incompatibilities = checkIncompatibilities();
+
+      // Generate HTML
+      let html = '';
+
+      // Load Indicator
+      const loadPercentage = Math.min(Math.round(totalLoad * 100), 100);
+      const loadWarning = totalLoad > 0.5 ? 'Load exceeds 50% safe drying capacity!' : '';
+      
+      html += `
+        <div class="results-section">
+          <h2>Wash Recommendations</h2>
+          
+          <div class="load-indicator">
+            <h3>Drum Load: ${loadPercentage}%</h3>
+            <div class="load-bar">
+              <div class="load-bar-fill" style="width: ${loadPercentage}%">${loadPercentage}%</div>
+            </div>
+            ${loadWarning ? `<div class="load-warning">${loadWarning}</div>` : ''}
+          </div>
+      `;
+
+      // Incompatibility Warnings
+      if (incompatibilities.length > 0) {
+        html += `
+          <div class="alert-box">
+            <div class="alert-title">⚠️ Incompatible Items Detected</div>
+            <ul class="alert-list">
+              ${incompatibilities.map(inc => `<li>${inc.item1} and ${inc.item2} should not be washed together</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      // Cycle Cards - 3 Options
+      const template = LAUNDRY_DATA.cycleTemplates[category];
+      if (template) {
+        html += '<div class="cycles-grid">';
+        
+        // Optimal
+        html += renderCycleCard('Optimal', 'Balanced wash & dry', template.optimal);
+        
+        // Extra Dry
+        html += renderCycleCard('Extra Dry', 'For damp-free results', template.extraDry);
+        
+        // Quick
+        if (template.quick.recommended === false) {
+          html += `
+            <div class="cycle-card not-recommended">
+              <div class="cycle-header">
+                <h3 class="cycle-title">Quick</h3>
+                <p class="cycle-subtitle">Not Recommended</p>
+              </div>
+              <p><strong>Reason:</strong> ${template.quick.reason}</p>
+            </div>
+          `;
+        } else {
+          html += renderCycleCard('Quick', 'Fast wash for light loads', template.quick);
+        }
+        
+        html += '</div>';
+      }
+
+      html += `</div>`;
+      
+      document.getElementById('results').innerHTML = html;
+    }
+
+    function renderCycleCard(title, subtitle, settings) {
+      return `
+        <div class="cycle-card">
+          <div class="cycle-header">
+            <h3 class="cycle-title">${title}</h3>
+            <p class="cycle-subtitle">${subtitle}</p>
+          </div>
+          
+          <div class="cycle-section">
+            <h4>Machine Settings</h4>
+            <div class="setting-row">
+              <span class="setting-label">Dial</span>
+              <span class="setting-value">${settings.dial}</span>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Temp</span>
+              <span class="setting-value">${settings.temp}</span>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Spin</span>
+              <span class="setting-value">${settings.spin}</span>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Dry</span>
+              <span class="setting-value">${settings.dry}</span>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Max Load</span>
+              <span class="setting-value">${Math.round(settings.maxLoad * 100)}%</span>
+            </div>
+          </div>
+
+          <div class="cycle-section">
+            <h4>Detergent</h4>
+            <p>${settings.detergent}</p>
+          </div>
+
+          <div class="cycle-section">
+            <h4>Prep Instructions</h4>
+            <ul class="prep-list">
+              ${settings.prep.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    // ========================================
+    // DATABASE TABLE
+    // ========================================
+
+    function renderDatabaseTable(filterCategory = 'all') {
+      const table = document.getElementById('databaseTable');
+      
+      // Count items by category
+      const categoryCounts = {
+        all: 0,
+        everyday: 0,
+        everyday_technical: 0,
+        jackets: 0,
+        towels: 0,
+        heavy: 0,
+        delicates: 0,
+        bulky: 0
+      };
+      
+      Object.values(LAUNDRY_DATA.items).forEach(item => {
+        categoryCounts.all++;
+        if (categoryCounts[item.category] !== undefined) {
+          categoryCounts[item.category]++;
+        }
+      });
+      
+      // Update database subtitle with total count and category breakdown
+      const subtitle = document.getElementById('databaseSubtitle');
+      if (subtitle) {
+        subtitle.textContent = `All ${categoryCounts.all} laundry items with volume percentages, categories, and preferred settings`;
+      }
+      
+      // Update filter button labels with counts
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      filterButtons.forEach(button => {
+        const filter = button.dataset.filter;
+        const count = categoryCounts[filter] || 0;
+        const baseText = button.textContent.replace(/\s*\(\d+\)/, ''); // Remove existing count
+        button.textContent = `${baseText} (${count})`;
+      });
+      
+      // Build table header
+      let html = `
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Volume (%)</th>
+            <th>Paired</th>
+            <th>Temp</th>
+            <th>Spin</th>
+            <th>Dry</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      
+      // Sort items alphabetically
+      const sortedItems = Object.entries(LAUNDRY_DATA.items).sort((a, b) => 
+        a[1].name.localeCompare(b[1].name)
+      );
+      
+      // Build table rows with expandable details
+      sortedItems.forEach(([itemKey, itemData], index) => {
+        const category = itemData.category;
+        const hideClass = (filterCategory !== 'all' && category !== filterCategory) ? 'hidden' : '';
+        const volumePercent = Math.round(itemData.volume * 100);
+        
+        // Get preferred settings from cycle template
+        const cycleTemplate = LAUNDRY_DATA.cycleTemplates[category];
+        const settings = cycleTemplate ? cycleTemplate.optimal : { temp: 'N/A', spin: 'N/A', dry: 'N/A' };
+        
+        // Paired info
+        const pairedText = itemData.isPaired 
+          ? `Yes (${itemData.pairMultiplier}x)` 
+          : 'No';
+        
+        // Main row
+        html += `
+          <tr class="${hideClass}" data-category="${category}" data-row-id="row-${index}" onclick="toggleExpandRow('row-${index}')">
+            <td>${index + 1}</td>
+            <td><span class="expand-icon">▶</span><strong>${itemData.name}</strong></td>
+            <td><span class="category-badge category-${category}">${category.replace('_', ' ')}</span></td>
+            <td>
+              <div class="volume-bar">
+                <div class="volume-bar-fill">
+                  <div class="volume-bar-inner" style="width: ${volumePercent}%"></div>
+                </div>
+                <span class="volume-percentage">${volumePercent}%</span>
+              </div>
+            </td>
+            <td>${pairedText}</td>
+            <td>${settings.temp}</td>
+            <td>${settings.spin}</td>
+            <td>${settings.dry}</td>
+          </tr>
+        `;
+        
+        // Expanded details row
+        const synonymsList = itemData.synonyms && itemData.synonyms.length > 0
+          ? itemData.synonyms.map(s => `<span class="synonym-badge">${s}</span>`).join('')
+          : '<span style="color: #78716C;">None</span>';
+        
+        const incompatibleList = itemData.incompatible && itemData.incompatible.length > 0
+          ? itemData.incompatible.map(key => {
+              const incompItem = LAUNDRY_DATA.items[key];
+              return `<span class="incompatible-badge">${incompItem ? incompItem.name : key}</span>`;
+            }).join('')
+          : '<span style="color: #78716C;">None</span>';
+        
+        html += `
+          <tr class="expanded-details" id="details-row-${index}" data-category="${category}">
+            <td colspan="8">
+              <div class="expanded-content">
+                <div class="detail-section">
+                  <div class="detail-label">Item Key:</div>
+                  <div class="detail-value"><code>${itemKey}</code></div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">All Synonyms:</div>
+                  <div class="synonym-list">${synonymsList}</div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">Incompatible Items:</div>
+                  <div class="incompatible-list">${incompatibleList}</div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">Full Settings:</div>
+                  <div class="detail-value">
+                    <strong>Dial:</strong> ${settings.dial || 'N/A'}<br>
+                    <strong>Max Load:</strong> ${cycleTemplate ? (cycleTemplate.optimal.maxLoad * 100) + '%' : 'N/A'}
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody>';
+      table.innerHTML = html;
+    }
+
+    function toggleExpandRow(rowId) {
+      const mainRow = document.querySelector(`tr[data-row-id="${rowId}"]`);
+      const detailsRow = document.getElementById(`details-${rowId}`);
+      
+      if (!mainRow || !detailsRow) return;
+      
+      // Toggle expanded state
+      const isExpanded = mainRow.classList.contains('expanded');
+      
+      if (isExpanded) {
+        mainRow.classList.remove('expanded');
+        detailsRow.classList.remove('show');
+      } else {
+        mainRow.classList.add('expanded');
+        detailsRow.classList.add('show');
+      }
+    }
+
+    function initDatabaseFilters() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.filter;
+          
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          // Re-render table with the selected filter
+          renderDatabaseTable(filter);
+        });
+      });
+    }
+
+    // ========================================
+    // SUBCATEGORY DROPDOWN FUNCTIONALITY
+    // ========================================
+
+    let activeDropdown = null;
+
+    function closeAllDropdowns() {
+      document.querySelectorAll('.subcategory-dropdown').forEach(dropdown => {
+        dropdown.classList.remove('show');
+      });
+      activeDropdown = null;
+    }
+
+    function createSubcategoryDropdown(categoryName, itemKeys) {
+      const dropdown = document.createElement('div');
+      dropdown.className = 'subcategory-dropdown';
+      
+      itemKeys.forEach(itemKey => {
+        const itemData = LAUNDRY_DATA.items[itemKey];
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'subcategory-item';
+        itemDiv.innerHTML = `
+          <span class="subcategory-item-name">${itemData.name}</span>
+          <span class="subcategory-item-volume">${Math.round(itemData.volume * 100)}%</span>
+        `;
+        
+        itemDiv.addEventListener('click', (e) => {
+          e.stopPropagation();
+          addItem(itemKey);
+          closeAllDropdowns();
+        });
+        
+        dropdown.appendChild(itemDiv);
+      });
+      
+      return dropdown;
+    }
+
+    // ========================================
+    // ADD ITEM TAB FUNCTIONALITY
+    // ========================================
+
+    // Smart Auto-Categorization for Custom Items
+    const SMART_CATEGORIES = {
+      'Shirts': ['shirt', 'tee', 'top', 'blouse', 'polo', 'tank'],
+      'Sweaters': ['sweater', 'hoodie', 'sweatshirt', 'pullover', 'cardigan', 'fleece'],
+      'Pants': ['pants', 'jeans', 'sweatpants', 'leggings', 'shorts', 'trouser', 'jogger'],
+      'Dresses & Skirts': ['dress', 'skirt', 'gown'],
+      'Jackets': ['jacket', 'coat', 'parka', 'windbreaker', 'blazer', 'robe', 'vest', 'outerwear'],
+      'Underwear & Socks': ['underwear', 'sock', 'brief', 'boxer', 'panty', 'bra'],
+      'Towels': ['towel', 'washcloth'],
+      'Bedding': ['sheet', 'pillowcase', 'duvet', 'blanket', 'quilt', 'comforter'],
+      'Delicates': ['silk', 'lace', 'lingerie', 'cashmere', 'rayon', 'modal'],
+      'Athletic': ['athletic', 'sport', 'performance', 'dri-fit', 'activewear', 'gym', 'workout', 'running']
+    };
+
+    let pendingCustomItem = null;
+    let pendingCustomKey = null;
+
+    function copyPrompt() {
+      const promptText = document.getElementById('masterPrompt').innerText;
+      navigator.clipboard.writeText(promptText).then(() => {
+        alert("Prompt copied! Paste it into Claude or Gemini.");
+      });
+    }
+
+    function previewItem() {
+      const jsonString = document.getElementById('jsonInput').value;
+      try {
+        const parsedData = JSON.parse(jsonString.trim());
+        
+        // Basic validation
+        if (!parsedData.name || !parsedData.category || !parsedData.volume) {
+          throw new Error("Missing required fields (name, category, volume).");
+        }
+
+        pendingCustomItem = parsedData;
+        pendingCustomKey = parsedData.name.toLowerCase().replace(/\s+/g, '_');
+        
+        // Populate editable fields
+        document.getElementById('editKey').value = pendingCustomKey;
+        document.getElementById('editName').value = parsedData.name;
+        document.getElementById('editCategory').value = parsedData.category;
+        document.getElementById('editVolume').value = parsedData.volume;
+        document.getElementById('editSynonyms').value = (parsedData.synonyms || []).join(', ');
+        document.getElementById('editIncompatible').value = (parsedData.incompatible || []).join(', ');
+        
+        // Show preview section
+        document.getElementById('previewSection').style.display = 'block';
+        
+        // Add validation listeners
+        initValidation();
+      } catch (e) {
+        alert("Invalid JSON. Please ensure you pasted the exact AI output. Error: " + e.message);
+      }
+    }
+
+    function initValidation() {
+      const nameInput = document.getElementById('editName');
+      const categoryInput = document.getElementById('editCategory');
+      const volumeInput = document.getElementById('editVolume');
+      
+      nameInput.addEventListener('input', () => validateField('name'));
+      categoryInput.addEventListener('change', () => validateField('category'));
+      volumeInput.addEventListener('input', () => validateField('volume'));
+      
+      // Update key when name changes
+      nameInput.addEventListener('input', () => {
+        const newKey = nameInput.value.toLowerCase().replace(/\s+/g, '_');
+        document.getElementById('editKey').value = newKey;
+      });
+    }
+
+    function validateField(fieldName) {
+      let isValid = true;
+      let input, errorEl;
+      
+      if (fieldName === 'name') {
+        input = document.getElementById('editName');
+        errorEl = document.getElementById('errorName');
+        isValid = input.value.trim().length > 0;
+      } else if (fieldName === 'category') {
+        input = document.getElementById('editCategory');
+        errorEl = document.getElementById('errorCategory');
+        isValid = VALID_CATEGORIES.includes(input.value);
+      } else if (fieldName === 'volume') {
+        input = document.getElementById('editVolume');
+        errorEl = document.getElementById('errorVolume');
+        const val = parseFloat(input.value);
+        isValid = !isNaN(val) && val >= 0.01 && val <= 1.0;
+      }
+      
+      if (isValid) {
+        input.classList.remove('error');
+        errorEl.classList.remove('show');
+      } else {
+        input.classList.add('error');
+        errorEl.classList.add('show');
+      }
+      
+      return isValid;
+    }
+
+    function validateAllFields() {
+      const nameValid = validateField('name');
+      const categoryValid = validateField('category');
+      const volumeValid = validateField('volume');
+      
+      return nameValid && categoryValid && volumeValid;
+    }
+
+    function saveCustomItem() {
+      // Validate all fields
+      if (!validateAllFields()) {
+        alert("Please fix the highlighted errors before saving.");
+        return;
+      }
+
+      // Collect values from editable fields
+      const customKey = document.getElementById('editKey').value;
+      const customName = document.getElementById('editName').value.trim();
+      const customCategory = document.getElementById('editCategory').value;
+      const customVolume = parseFloat(document.getElementById('editVolume').value);
+      const customSynonyms = document.getElementById('editSynonyms').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+      const customIncompatible = document.getElementById('editIncompatible').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+      
+      const finalItem = {
+        name: customName,
+        category: customCategory,
+        volume: customVolume,
+        synonyms: customSynonyms,
+        incompatible: customIncompatible,
+        isPaired: false
+      };
+
+      // Fetch existing custom items from localStorage
+      let customItems = {};
+      const savedItems = localStorage.getItem('customLaundryItems');
+      if (savedItems) {
+        customItems = JSON.parse(savedItems);
+      }
+
+      // Add the new item
+      customItems[customKey] = finalItem;
+      
+      // Save back to localStorage
+      localStorage.setItem('customLaundryItems', JSON.stringify(customItems));
+      
+      // Update current session state
+      LAUNDRY_DATA.items[customKey] = finalItem;
+      
+      // Always add to Custom Items category
+      if (!QUICK_ADD_CATEGORIES['Custom Items']) {
+        QUICK_ADD_CATEGORIES['Custom Items'] = [];
+      }
+      if (!QUICK_ADD_CATEGORIES['Custom Items'].includes(customKey)) {
+        QUICK_ADD_CATEGORIES['Custom Items'].push(customKey);
+      }
+      
+      // Smart Auto-Categorization: Check if item matches any SMART_CATEGORIES keywords
+      const itemName = finalItem.name.toLowerCase();
+      const itemSynonyms = (finalItem.synonyms || []).map(s => s.toLowerCase());
+      const allSearchableText = [itemName, ...itemSynonyms].join(' ');
+      
+      for (const [categoryName, keywords] of Object.entries(SMART_CATEGORIES)) {
+        // Check if any keyword matches the item name or synonyms
+        const hasMatch = keywords.some(keyword => allSearchableText.includes(keyword.toLowerCase()));
+        
+        if (hasMatch) {
+          // Add to this category in QUICK_ADD_CATEGORIES if it exists
+          if (QUICK_ADD_CATEGORIES[categoryName]) {
+            if (!QUICK_ADD_CATEGORIES[categoryName].includes(customKey)) {
+              QUICK_ADD_CATEGORIES[categoryName].push(customKey);
+            }
+          }
+        }
+      }
+      
+      // Rebuild synonym database so voice recognition picks up new item immediately
+      Object.assign(SYNONYM_DATABASE, buildSynonymDatabase());
+      
+      // Refresh UI
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('previewSection').style.display = 'none';
+      renderChips();
+      renderDatabaseTable();
+      
+      alert(`${finalItem.name} saved successfully!`);
+    }
+
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initVoiceRecognition();
+      renderChips();
+      initTabs();
+      initDatabaseFilters();
+      
+      document.getElementById('voiceButton').addEventListener('click', startVoiceRecognition);
+      
+      // Manual input event listeners
+      const manualInput = document.getElementById('manualInput');
+      const addItemsButton = document.getElementById('addItemsButton');
+      
+      if (manualInput && addItemsButton) {
+        // Enter key submits
+        manualInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            handleManualInput();
+          }
+        });
+        
+        // Button click submits
+        addItemsButton.addEventListener('click', handleManualInput);
+      }
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.chip.has-subcategories') && !e.target.closest('.subcategory-dropdown')) {
+          closeAllDropdowns();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
