@@ -262,56 +262,39 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2);
     }
 
     .add-items-btn:hover {
-      background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(217, 119, 6, 0.3);
     }
 
     .add-items-btn:active {
       transform: translateY(0);
     }
 
-    .add-icon {
-      stroke: currentColor;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-    }
-
-    .input-hint {
-      color: #78716C;
+    .manual-input-hint {
+      color: #A8A29E;
       font-size: 0.85rem;
       font-weight: 300;
-      margin: 0;
     }
 
-    @media (max-width: 640px) {
-      .input-container {
-        flex-direction: column;
-      }
-      
-      .add-items-btn {
-        justify-content: center;
-        width: 100%;
-      }
-    }
-
-    /* Transcript */
+    /* Transcript Display */
     .transcript {
-      background: rgba(217, 119, 6, 0.1);
-      border: 1px solid rgba(217, 119, 6, 0.3);
-      border-radius: 16px;
-      padding: 1rem 1.5rem;
-      text-align: center;
+      background: rgba(217, 119, 6, 0.08);
+      border: 2px solid rgba(217, 119, 6, 0.25);
+      border-radius: 12px;
+      padding: 16px;
       margin-bottom: 2rem;
       min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      color: #FFFBEB;
+      font-size: 1.05rem;
     }
 
     .transcript.empty {
@@ -320,20 +303,15 @@
     }
 
     /* Quick Add Chips */
-    .quick-add {
+    .chips-section {
       margin-bottom: 3rem;
-    }
-
-    .quick-add h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #D97706;
     }
 
     .chips-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
+      margin-top: 1rem;
     }
 
     .chip {
@@ -341,29 +319,53 @@
       border: 2px solid rgba(217, 119, 6, 0.3);
       border-radius: 12px;
       padding: 12px 16px;
+      text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      text-align: center;
-      font-size: 0.95rem;
-      font-weight: 400;
-      min-height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-weight: 500;
       position: relative;
-      gap: 8px;
     }
 
     .chip:hover {
       background: rgba(217, 119, 6, 0.2);
-      border-color: rgba(217, 119, 6, 0.5);
+      border-color: #D97706;
+      transform: translateY(-2px);
     }
 
     .chip.selected {
-      background: rgba(217, 119, 6, 0.3);
+      background: rgba(217, 119, 6, 0.25);
       border-color: #D97706;
-      font-weight: 500;
-      padding: 12px 8px;
+    }
+
+    /* Chip Buttons */
+    .chip-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(217, 119, 6, 0.3);
+      border: 1px solid #D97706;
+      color: #FFFBEB;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .chip-btn:hover {
+      background: #D97706;
+      transform: scale(1.1);
+    }
+
+    .chip.selected {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     .chip-content {
@@ -371,224 +373,69 @@
       text-align: center;
     }
 
-    .chip-controls {
-      display: none;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .chip.selected .chip-controls {
-      display: flex;
-    }
-
-    .chip-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: rgba(217, 119, 6, 0.2);
-      border: 1px solid rgba(217, 119, 6, 0.4);
-      color: #FFFBEB;
-      font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .chip-btn:hover {
-      background: rgba(217, 119, 6, 0.4);
-      border-color: #D97706;
-      transform: scale(1.1);
-    }
-
-    .chip-btn:active {
-      transform: scale(0.95);
-    }
-
-    .chip-quantity {
-      font-weight: 700;
-      color: #F59E0B;
-      font-size: 1.1rem;
-      min-width: 24px;
-      text-align: center;
-    }
-
     /* Results Section */
-    .results {
-      margin-top: 3rem;
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Load Indicator */
-    .load-indicator {
+    .results-section {
       background: rgba(217, 119, 6, 0.05);
-      border: 1px solid rgba(217, 119, 6, 0.2);
+      border: 2px solid rgba(217, 119, 6, 0.2);
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 2rem;
+    }
+
+    .load-indicator {
       margin-bottom: 2rem;
-    }
-
-    .load-indicator h3 {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      color: #D97706;
-    }
-
-    .load-bar-container {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 8px;
-      height: 32px;
-      overflow: hidden;
-      margin-bottom: 0.5rem;
-      position: relative;
     }
 
     .load-bar {
-      background: linear-gradient(90deg, #D97706 0%, #F59E0B 100%);
+      height: 24px;
+      background: rgba(217, 119, 6, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .load-bar-fill {
       height: 100%;
-      transition: width 0.5s ease;
+      background: linear-gradient(90deg, #D97706, #F59E0B);
+      transition: width 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
-      font-size: 0.85rem;
       color: #121212;
-      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
     }
 
     .load-warning {
-      font-size: 0.85rem;
-      color: #FCA5A5;
-      margin-top: 0.5rem;
+      color: #EF4444;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      font-weight: 600;
     }
 
-    /* Warnings */
-    .warnings {
-      margin-bottom: 2rem;
-    }
-
-    .warning-card {
-      background: rgba(217, 119, 6, 0.15);
-      border: 2px solid #D97706;
-      border-radius: 16px;
+    .settings-card {
+      background: rgba(217, 119, 6, 0.08);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      border-radius: 12px;
       padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .settings-card h3 {
+      color: #F59E0B;
       margin-bottom: 1rem;
     }
 
-    .warning-card h3 {
-      color: #F59E0B;
-      font-size: 1.3rem;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .warning-icon {
-      width: 24px;
-      height: 24px;
-      stroke: #F59E0B;
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .warning-card p {
-      margin-bottom: 0.5rem;
-      line-height: 1.7;
-    }
-
-    .warning-card ul {
-      margin-left: 1.5rem;
-      margin-top: 0.5rem;
-    }
-
-    .warning-card li {
-      margin-bottom: 0.3rem;
-    }
-
-    /* Cycle Cards */
-    .cycles-grid {
+    .settings-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .cycle-card {
-      background: rgba(217, 119, 6, 0.05);
-      border: 1px solid rgba(217, 119, 6, 0.2);
-      border-radius: 20px;
-      padding: 2rem;
-      transition: all 0.3s ease;
-    }
-
-    .cycle-card:hover {
-      border-color: rgba(217, 119, 6, 0.4);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.15);
-    }
-
-    .cycle-card.not-recommended {
-      opacity: 0.6;
-      border-style: dashed;
-    }
-
-    .cycle-header {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(217, 119, 6, 0.2);
-    }
-
-    .cycle-title {
-      font-size: 1.8rem;
-      color: #D97706;
-      margin-bottom: 0.3rem;
-    }
-
-    .cycle-subtitle {
-      color: #A8A29E;
-      font-size: 0.9rem;
-      font-weight: 300;
-    }
-
-    .cycle-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .cycle-section h4 {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #D97706;
-      margin-bottom: 0.5rem;
-    }
-
-    .cycle-section p {
-      margin-bottom: 0.3rem;
+      gap: 12px;
     }
 
     .setting-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.15);
     }
 
     .setting-row:last-child {
@@ -601,97 +448,35 @@
     }
 
     .setting-value {
-      font-weight: 500;
       color: #FFFBEB;
+      font-weight: 600;
     }
 
-    .prep-list {
-      list-style: none;
-      padding: 0;
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
     }
 
-    .prep-list li {
-      padding-left: 1.5rem;
+    .alert-title {
+      color: #EF4444;
+      font-weight: 700;
       margin-bottom: 0.5rem;
-      position: relative;
     }
 
-    .prep-list li::before {
-      content: "•";
-      position: absolute;
-      left: 0.5rem;
-      color: #D97706;
-      font-weight: bold;
+    .alert-list {
+      list-style: none;
+      padding-left: 0;
     }
 
-    /* Reset Button */
-    .reset-section {
-      text-align: center;
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(217, 119, 6, 0.2);
+    .alert-list li {
+      padding: 4px 0;
+      color: #FCA5A5;
     }
 
-    .reset-button {
-      background: rgba(217, 119, 6, 0.1);
-      border: 2px solid rgba(217, 119, 6, 0.3);
-      border-radius: 16px;
-      padding: 16px 40px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #FFFBEB;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-    }
-
-    .reset-button:hover {
-      background: rgba(217, 119, 6, 0.2);
-      border-color: #D97706;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.2);
-    }
-
-    .reset-button:active {
-      transform: translateY(0);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .cycles-grid {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      .voice-button {
-        width: 140px;
-        height: 140px;
-      }
-
-      .chips-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      }
-
-      .chip.selected {
-        padding: 8px 4px;
-      }
-
-      .chip-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 1rem;
-      }
-
-      .chip-quantity {
-        font-size: 1rem;
-        min-width: 20px;
-      }
-    }
-
-    /* Tabs Navigation */
+    /* Tabs */
     .tabs-nav {
       display: flex;
       gap: 8px;
@@ -700,21 +485,20 @@
     }
 
     .tab-button {
-      background: none;
+      background: transparent;
       border: none;
       color: #A8A29E;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
       padding: 12px 24px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
-      position: relative;
-      transition: all 0.3s ease;
+      transition: all 0.2s;
       border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
     }
 
     .tab-button:hover {
-      color: #FFFBEB;
+      color: #F59E0B;
     }
 
     .tab-button.active {
@@ -731,21 +515,11 @@
     }
 
     /* Database Table Styles */
-    .database-header {
-      margin-bottom: 2rem;
+    .database-section {
+      margin-top: 2rem;
     }
 
-    .database-header h2 {
-      color: #D97706;
-      margin-bottom: 0.5rem;
-    }
-
-    .database-header p {
-      color: #A8A29E;
-      margin-bottom: 1.5rem;
-    }
-
-    .database-filters {
+    .filter-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -756,90 +530,190 @@
       background: rgba(217, 119, 6, 0.1);
       border: 1px solid rgba(217, 119, 6, 0.3);
       color: #FFFBEB;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.875rem;
       padding: 8px 16px;
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s;
+      font-size: 0.9rem;
     }
 
     .filter-btn:hover {
       background: rgba(217, 119, 6, 0.2);
-      border-color: rgba(217, 119, 6, 0.5);
     }
 
     .filter-btn.active {
       background: #D97706;
       border-color: #D97706;
       color: #121212;
-      font-weight: 500;
-    }
-
-    .database-table-container {
-      overflow-x: auto;
-      background: rgba(255, 251, 235, 0.02);
-      border-radius: 12px;
-      border: 1px solid rgba(217, 119, 6, 0.2);
+      font-weight: 600;
     }
 
     .database-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      background: rgba(217, 119, 6, 0.03);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .database-table thead {
-      background: rgba(217, 119, 6, 0.1);
-      position: sticky;
-      top: 0;
+    .database-table th,
+    .database-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(217, 119, 6, 0.15);
     }
 
     .database-table th {
-      text-align: left;
-      padding: 12px 16px;
-      color: #D97706;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      border-bottom: 2px solid rgba(217, 119, 6, 0.3);
-    }
-
-    .database-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(217, 119, 6, 0.1);
-      color: #FFFBEB;
+      background: rgba(217, 119, 6, 0.15);
+      font-weight: 600;
+      color: #F59E0B;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
     }
 
     .database-table tbody tr {
-      transition: background 0.2s ease;
+      transition: background 0.2s;
+      cursor: pointer;
     }
 
     .database-table tbody tr:hover {
-      background: rgba(217, 119, 6, 0.05);
+      background: rgba(217, 119, 6, 0.08);
     }
 
     .database-table tbody tr.hidden {
       display: none;
     }
 
-    .category-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+    /* Row Number Column */
+    .database-table th:first-child,
+    .database-table td:first-child {
+      width: 60px;
+      text-align: center;
+      color: #78716C;
       font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
-    .category-everyday { background: rgba(34, 197, 94, 0.2); color: #86EFAC; }
-    .category-everyday_technical { background: rgba(14, 165, 233, 0.2); color: #7DD3FC; }
-    .category-jackets { background: rgba(217, 119, 6, 0.2); color: #FCD34D; }
-    .category-towels { background: rgba(59, 130, 246, 0.2); color: #93C5FD; }
-    .category-bulky { background: rgba(168, 85, 247, 0.2); color: #C4B5FD; }
-    .category-heavy { background: rgba(245, 158, 11, 0.2); color: #FCD34D; }
-    .category-delicates { background: rgba(236, 72, 153, 0.2); color: #F9A8D4; }
-    .category-heavy_single { background: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
+    /* Expandable Row Styles */
+    .database-table tbody tr.expanded {
+      background: rgba(217, 119, 6, 0.12);
+    }
+
+    .expand-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      margin-right: 8px;
+      color: #D97706;
+    }
+
+    .database-table tbody tr.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .expanded-details {
+      display: none;
+      background: rgba(217, 119, 6, 0.08);
+      border-top: 2px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .expanded-details.show {
+      display: table-row;
+    }
+
+    .expanded-content {
+      padding: 1.5rem;
+    }
+
+    .detail-section {
+      margin-bottom: 1rem;
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-label {
+      color: #F59E0B;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .detail-value {
+      color: #FFFBEB;
+      line-height: 1.6;
+    }
+
+    .synonym-list, .incompatible-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 0.5rem;
+    }
+
+    .synonym-badge, .incompatible-badge {
+      background: rgba(217, 119, 6, 0.2);
+      border: 1px solid rgba(217, 119, 6, 0.4);
+      color: #FFFBEB;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .incompatible-badge {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #FCA5A5;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .category-everyday {
+      background: rgba(16, 185, 129, 0.2);
+      color: #86EFAC;
+    }
+
+    .category-everyday_technical {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93C5FD;
+    }
+
+    .category-jackets {
+      background: rgba(168, 85, 247, 0.2);
+      color: #C4B5FD;
+    }
+
+    .category-towels {
+      background: rgba(245, 158, 11, 0.2);
+      color: #FCD34D;
+    }
+
+    .category-heavy {
+      background: rgba(239, 68, 68, 0.2);
+      color: #FCA5A5;
+    }
+
+    .category-heavy_single {
+      background: rgba(220, 38, 38, 0.2);
+      color: #FCA5A5;
+    }
+
+    .category-delicates {
+      background: rgba(236, 72, 153, 0.2);
+      color: #F9A8D4;
+    }
+
+    .category-bulky {
+      background: rgba(107, 114, 128, 0.2);
+      color: #D1D5DB;
+    }
 
     .volume-bar {
       display: flex;
@@ -1019,6 +893,65 @@
       border-radius: 8px;
       margin-top: 1rem;
     }
+
+    /* Editable Preview Styles */
+    .edit-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .edit-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .edit-label {
+      color: #F59E0B;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .edit-input {
+      background: #121212;
+      border: 2px solid rgba(217, 119, 6, 0.3);
+      color: #FFFBEB;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .edit-input:focus {
+      outline: none;
+      border-color: #D97706;
+      background: rgba(217, 119, 6, 0.05);
+    }
+
+    .edit-input.error {
+      border-color: #EF4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .error-message {
+      color: #EF4444;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .validation-hint {
+      color: #78716C;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 0.25rem;
+    }
   </style>
 </head>
 <body>
@@ -1048,17 +981,14 @@
           3. Stop speaking and wait for "Processing..." → "Got it!"<br>
           4. Results will appear automatically
         </p>
-        <p style="margin: 0; font-size: 0.85rem; color: #A8A29E; font-style: italic;">
-          Note: Voice only works on Chrome/Safari with microphone permission. If it doesn't work, use the chip buttons below instead.
-        </p>
       </div>
 
-      <!-- Voice Input Section -->
+      <!-- Voice Button Section -->
       <div class="voice-section">
-        <button class="voice-button" id="voiceButton" aria-label="Voice input">
+        <button id="voiceButton" class="voice-button" title="Click to speak">
           <div class="recording-indicator"></div>
           <svg class="mic-icon" viewBox="0 0 24 24">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M12 1a3 3 0 0 1 3 3v8a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3z"></path>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
             <line x1="12" y1="19" x2="12" y2="23"></line>
             <line x1="8" y1="23" x2="16" y2="23"></line>
@@ -1067,43 +997,41 @@
           <svg class="checkmark" viewBox="0 0 24 24">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <div class="voice-status">Tap to speak</div>
+          <span class="voice-status">Tap to Speak</span>
         </button>
-        <p class="voice-hint">Or use quick-add buttons below</p>
+        <p class="voice-hint">Click the button and tell me what you're washing</p>
       </div>
 
-      <!-- Manual Text Input Section -->
+      <!-- Manual Text Input -->
       <div class="manual-input-section">
-        <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; margin-bottom: 0.75rem; color: #D97706;">
-          Or Type Your Items
-        </h3>
         <div class="input-container">
           <input 
             type="text" 
             id="manualInput" 
-            placeholder="e.g., 3 t-shirts, 2 jeans, 1 hoodie"
-            class="manual-input-field"
+            class="manual-input-field" 
+            placeholder="Type what you're washing (e.g., 3 towels, 2 t-shirts)"
+            autocomplete="off"
           />
           <button id="addItemsButton" class="add-items-btn">
-            <svg class="add-icon" viewBox="0 0 24 24" width="20" height="20">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
             Add Items
           </button>
         </div>
-        <p class="input-hint">Type naturally and press Enter or click Add Items</p>
+        <p class="manual-input-hint">Or type your items and press Enter</p>
       </div>
 
       <!-- Transcript Display -->
-      <div class="transcript empty" id="transcript">
-        Say something like: "I have 3 towels and some t-shirts"
+      <div id="transcript" class="transcript empty">
+        Your spoken or typed items will appear here
       </div>
 
-      <!-- Quick Add Chips -->
-      <div class="quick-add">
-        <h2>Quick Add</h2>
-        <div class="chips-grid" id="chipsGrid"></div>
+      <!-- Quick Add Section -->
+      <div class="chips-section">
+        <h2>Quick Add Categories</h2>
+        <div id="chipsGrid" class="chips-grid"></div>
       </div>
 
       <!-- Results Section -->
@@ -1112,11 +1040,12 @@
 
     <!-- Database Tab -->
     <div class="tab-content" id="databaseTab">
-      <div class="database-header">
-        <h2>Complete Item Database</h2>
-        <p id="databaseSubtitle">Loading...</p>
-        <div class="database-filters">
-          <button class="filter-btn active" data-filter="all">All Items</button>
+      <div class="database-section">
+        <h2>Item Database</h2>
+        <p class="subtitle" id="databaseSubtitle">All laundry items with volume percentages, categories, and preferred settings</p>
+        
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="everyday">Everyday</button>
           <button class="filter-btn" data-filter="everyday_technical">Technical</button>
           <button class="filter-btn" data-filter="jackets">Jackets</button>
@@ -1125,58 +1054,42 @@
           <button class="filter-btn" data-filter="delicates">Delicates</button>
           <button class="filter-btn" data-filter="bulky">Bulky</button>
         </div>
-      </div>
-      <div class="database-table-container">
-        <table class="database-table" id="databaseTable">
-          <!-- Table will be populated by JavaScript -->
-        </table>
+
+        <table id="databaseTable" class="database-table"></table>
       </div>
     </div>
 
     <!-- Add Item Tab -->
     <div class="tab-content" id="addTab">
-      <div class="add-item-header">
-        <h2>Add Custom Laundry Item</h2>
-        <p>Use an AI assistant to generate the precise data format for your new item.</p>
-      </div>
-
       <div class="prompt-section">
-        <h3>1. Copy this Master Prompt</h3>
+        <h3>1. Copy This Prompt</h3>
+        <p>Use Claude or Gemini to create a properly formatted laundry item. Copy the prompt below and describe your item.</p>
         <div class="prompt-box">
-          <code id="masterPrompt">You are an expert laundry care assistant. The user has an LG WashTower (model WKE100HVA) with specific cycle options.
+          <code id="masterPrompt">You are a laundry assistant helping me add a new item to my database. Based on my description, return ONLY valid JSON (no markdown, no explanation) with these fields:
 
-Your task: analyze the garment care tag and output ONLY a JSON object.
-
-**Available Categories:**
-- everyday: **Robust cotton items** (t-shirts, casual cotton wear, non-technical fabrics)
-- everyday_technical: **Synthetics & blends** (nylon, polyester, spandex, athletic wear, performance fabrics)
-- jackets: **Outerwear** (windbreakers, rain jackets, light coats, vests)
-- towels: Bath towels, hand towels, washcloths
-- heavy: Jeans, heavy cotton items, denim
-- delicates: Silk, lace, bras, lingerie, wool, cashmere, rayon
-- bulky: Bedding, blankets, large items, comforters
-
-**Category Selection Guide:**
-- If fabric is **nylon, polyester, spandex, or blend** → use **everyday_technical**
-- If fabric is **rayon, modal, tencel** → use **delicates** (heat-sensitive)
-- If fabric has **elastane/spandex >10%** → use **delicates** (mechanical-sensitive)
-- If item is **jacket, coat, vest, windbreaker** → use **jackets**
-- If fabric is **100% cotton AND not embellished** → use **everyday**
-
-**JSON Schema:**
 {
   "name": "Item Name",
-  "category": "everyday|everyday_technical|jackets|towels|heavy|delicates|bulky",
-  "volume": 0.00,
-  "synonyms": ["synonym1", "synonym2"],
-  "incompatible": []
+  "category": "everyday|everyday_technical|jackets|towels|heavy|heavy_single|bulky|delicates",
+  "volume": 0.01-1.0,
+  "synonyms": ["array", "of", "terms"],
+  "incompatible": ["optional_item_keys"]
 }
 
-**Instructions:**
-1. Assign volume as a decimal (0.01 = 1% of drum)
-2. Add 3-5 synonyms for voice recognition
-3. List incompatible items if any (e.g., towels, velcro items)
-4. Output ONLY valid JSON, no explanation
+**Volume Guidelines:**
+- Small items (underwear, socks): 0.03-0.05
+- Medium items (t-shirts, blouses): 0.05-0.10
+- Large items (jeans, sweaters): 0.10-0.20
+- Very large items (jackets, towels): 0.20-0.50
+
+**Categories:**
+- everyday: Regular cotton clothes
+- everyday_technical: Synthetic athletic/performance wear
+- jackets: Outerwear & coats
+- towels: Bath & beach towels
+- heavy: Denim jeans
+- heavy_single: Single heavy items (winter coat, bathrobe)
+- bulky: Bedding, blankets, comforters
+- delicates: Silk, lace, lingerie
 
 **Example (Nylon Jacket):**
 {
@@ -1197,8 +1110,58 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
       </div>
 
       <div id="previewSection" class="preview-section" style="display: none;">
-        <h3>3. Preview & Save</h3>
-        <div id="previewContent" class="preview-card"></div>
+        <h3>3. Preview & Edit</h3>
+        <p style="color: #A8A29E; margin-bottom: 1rem;">Review and modify the fields below. Invalid values will be highlighted in red.</p>
+        <div id="previewContent" class="preview-card">
+          <div class="edit-grid">
+            <div class="edit-field">
+              <label class="edit-label">Item Key</label>
+              <input type="text" id="editKey" class="edit-input" readonly />
+              <span class="validation-hint">Auto-generated from name</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Name</label>
+              <input type="text" id="editName" class="edit-input" />
+              <span class="error-message" id="errorName">Name is required</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Category</label>
+              <select id="editCategory" class="edit-input">
+                <option value="">Select a category</option>
+                <option value="everyday">Everyday</option>
+                <option value="everyday_technical">Technical/Athletic</option>
+                <option value="jackets">Jackets</option>
+                <option value="towels">Towels</option>
+                <option value="heavy">Heavy (Denim)</option>
+                <option value="heavy_single">Heavy Single</option>
+                <option value="bulky">Bulky</option>
+                <option value="delicates">Delicates</option>
+              </select>
+              <span class="error-message" id="errorCategory">Please select a valid category</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Volume (0.01 - 1.0)</label>
+              <input type="number" id="editVolume" class="edit-input" step="0.01" min="0.01" max="1.0" />
+              <span class="error-message" id="errorVolume">Volume must be between 0.01 and 1.0</span>
+              <span class="validation-hint">Small: 0.03-0.05 | Medium: 0.05-0.10 | Large: 0.10-0.20 | XL: 0.20-0.50</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Synonyms (comma-separated)</label>
+              <input type="text" id="editSynonyms" class="edit-input" placeholder="e.g., t-shirt, tshirt, tee" />
+              <span class="validation-hint">Separate each synonym with a comma</span>
+            </div>
+
+            <div class="edit-field">
+              <label class="edit-label">Incompatible Items (comma-separated keys)</label>
+              <input type="text" id="editIncompatible" class="edit-input" placeholder="e.g., jeans, bath_towel" />
+              <span class="validation-hint">Optional - item keys that shouldn't be washed together</span>
+            </div>
+          </div>
+        </div>
         <button onclick="saveCustomItem()" class="action-btn success-btn">Save to Local Database</button>
       </div>
     </div>
@@ -1328,7 +1291,7 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           volume: 0.04,
           isPaired: false,
           synonyms: ['shorts', 'gym shorts', 'athletic shorts', 'running shorts', 'basketball shorts', 'cargo shorts'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
         // BOTTOMS - Leggings
@@ -1337,8 +1300,8 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           category: 'everyday',
           volume: 0.05,
           isPaired: false,
-          synonyms: ['leggings', 'yoga pants', 'athletic tights', 'tights'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          synonyms: ['leggings', 'yoga pants', 'tights'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
         // BOTTOMS - Sweatpants
@@ -1347,20 +1310,8 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           category: 'everyday',
           volume: 0.08,
           isPaired: false,
-          synonyms: ['sweatpants', 'sweat pants', 'joggers', 'track pants', 'athletic pants', 'lounge pants'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
-        },
-
-        // BOTTOMS - Jeans (PAIRED ITEM but multiplier = 1)
-        jeans: {
-          name: 'Jeans',
-          category: 'heavy',
-          volume: 0.10,
-          isPaired: true,
-          pairMultiplier: 1,
-          displayAs: 'item',
-          synonyms: ['jeans', 'jean', 'denim', 'denims', 'blue jeans', 'denim pants'],
-          incompatible: ['underwear', 'sock', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'tshirt', 'heavy_jacket', 'winter_coat', 'tank_top', 'polo', 'button_up', 'shorts', 'leggings']
+          synonyms: ['sweatpants', 'joggers', 'track pants', 'lounge pants'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
         // BOTTOMS - Dress Pants
@@ -1369,92 +1320,139 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           category: 'everyday',
           volume: 0.09,
           isPaired: false,
-          synonyms: ['dress pants', 'slacks', 'trousers', 'khakis', 'chinos', 'work pants'],
+          synonyms: ['dress pants', 'slacks', 'trousers', 'khakis', 'chinos'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // ATHLETIC WEAR
+        athletic_shirt: {
+          name: 'Athletic Shirt',
+          category: 'everyday_technical',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['athletic shirt', 'workout shirt', 'gym shirt', 'performance tee', 'dri-fit shirt', 'moisture wicking shirt'],
           incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
-        // BOTTOMS - Skirts & Dresses
+        athletic_shorts: {
+          name: 'Athletic Shorts',
+          category: 'everyday_technical',
+          volume: 0.04,
+          isPaired: false,
+          synonyms: ['athletic shorts', 'workout shorts', 'gym shorts', 'running shorts', 'sport shorts'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        athletic_leggings: {
+          name: 'Athletic Leggings',
+          category: 'everyday_technical',
+          volume: 0.05,
+          isPaired: false,
+          synonyms: ['athletic leggings', 'workout leggings', 'compression pants', 'performance leggings'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        sports_bra: {
+          name: 'Sports Bra',
+          category: 'everyday_technical',
+          volume: 0.04,
+          isPaired: false,
+          synonyms: ['sports bra', 'athletic bra', 'workout bra'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        // DRESSES & SKIRTS
+        dress_light: {
+          name: 'Light Dress',
+          category: 'everyday',
+          volume: 0.08,
+          isPaired: false,
+          synonyms: ['dress', 'sundress', 'light dress', 'summer dress'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
+        dress_heavy: {
+          name: 'Heavy Dress',
+          category: 'everyday',
+          volume: 0.12,
+          isPaired: false,
+          synonyms: ['heavy dress', 'winter dress', 'long dress', 'maxi dress'],
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+        },
+
         skirt: {
           name: 'Skirt',
           category: 'everyday',
-          volume: 0.06,
+          volume: 0.05,
           isPaired: false,
           synonyms: ['skirt', 'mini skirt', 'midi skirt', 'maxi skirt'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          incompatible: ['jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
-        dress: {
-          name: 'Dress',
-          category: 'everyday',
-          volume: 0.10,
+        // JEANS
+        jeans: {
+          name: 'Jeans',
+          category: 'heavy',
+          volume: 0.15,
           isPaired: false,
-          synonyms: ['dress', 'sundress', 'maxi dress', 'midi dress'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          synonyms: ['jeans', 'denim', 'blue jeans', 'denim pants'],
+          incompatible: ['underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shorts', 'athletic_leggings', 'dress_light', 'dress_heavy', 'skirt', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
         },
 
-        // OUTERWEAR - Light Jackets
+        // JACKETS
         light_jacket: {
           name: 'Light Jacket',
-          category: 'everyday',
-          volume: 0.20,
+          category: 'jackets',
+          volume: 0.18,
           isPaired: false,
-          synonyms: ['light jacket', 'windbreaker', 'rain jacket', 'track jacket', 'running jacket', 'shell jacket'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
-        },
-
-        medium_jacket: {
-          name: 'Medium Jacket',
-          category: 'everyday',
-          volume: 0.30,
-          isPaired: false,
-          synonyms: ['medium jacket', 'jacket', 'blazer', 'sport coat', 'fleece jacket'],
-          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          synonyms: ['jacket', 'light jacket', 'windbreaker', 'spring jacket'],
+          incompatible: ['bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe']
         },
 
         heavy_jacket: {
           name: 'Heavy Jacket',
           category: 'heavy_single',
-          volume: 0.45,
+          volume: 0.35,
           isPaired: false,
-          synonyms: ['heavy jacket', 'puffer jacket', 'down jacket', 'ski jacket', 'insulated jacket'],
-          incompatible: ['*']
+          synonyms: ['heavy jacket', 'winter jacket', 'parka', 'puffer jacket', 'down jacket'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
         },
 
         winter_coat: {
           name: 'Winter Coat',
           category: 'heavy_single',
-          volume: 0.50,
+          volume: 0.40,
           isPaired: false,
-          synonyms: ['winter coat', 'coat', 'parka', 'overcoat', 'trench coat'],
-          incompatible: ['*']
+          synonyms: ['winter coat', 'overcoat', 'trench coat', 'wool coat'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'bath_towel', 'hand_towel', 'washcloth', 'beach_towel', 'bathrobe', 'heavy_jacket', 'duvet_cover', 'blanket_light', 'blanket_heavy']
         },
 
-        bathrobe: {
-          name: 'Bathrobe',
-          category: 'heavy_single',
-          volume: 0.50,
-          isPaired: false,
-          synonyms: ['bathrobe', 'robe', 'terry robe', 'bath robe'],
-          incompatible: ['*']
-        },
-
-        // TOWELS - Bath Towels
-        bath_towel: {
-          name: 'Bath Towel',
-          category: 'towels',
-          volume: 0.15,
-          isPaired: false,
-          synonyms: ['bath towel', 'towel', 'towels', 'bathroom towel'],
-          incompatible: ['tshirt', 'underwear', 'sock', 'jeans', 'bathrobe', 'heavy_jacket', 'winter_coat', 'sheet_queen', 'sheet_king', 'hoodie', 'tank_top', 'polo', 'button_up', 'shorts', 'leggings', 'long_sleeve', 'blouse', 'sweater_light', 'sweater_heavy', 'sweatpants', 'dress_pants', 'skirt', 'dress', 'light_jacket', 'medium_jacket']
-        },
-
+        // TOWELS
         hand_towel: {
           name: 'Hand Towel',
           category: 'towels',
-          volume: 0.05,
+          volume: 0.08,
           isPaired: false,
-          synonyms: ['hand towel', 'hand towels'],
-          incompatible: ['tshirt', 'underwear', 'sock', 'jeans', 'bathrobe', 'heavy_jacket', 'winter_coat', 'hoodie', 'tank_top', 'polo', 'button_up', 'shorts', 'leggings', 'long_sleeve', 'blouse', 'sweater_light', 'sweater_heavy', 'sweatpants', 'dress_pants', 'skirt', 'dress', 'light_jacket', 'medium_jacket']
+          synonyms: ['hand towel', 'small towel', 'guest towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat']
+        },
+
+        bath_towel: {
+          name: 'Bath Towel',
+          category: 'towels',
+          volume: 0.25,
+          isPaired: false,
+          synonyms: ['bath towel', 'towel', 'body towel', 'large towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        beach_towel: {
+          name: 'Beach Towel',
+          category: 'towels',
+          volume: 0.30,
+          isPaired: false,
+          synonyms: ['beach towel', 'pool towel', 'extra large towel'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
         },
 
         washcloth: {
@@ -1462,36 +1460,54 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           category: 'towels',
           volume: 0.03,
           isPaired: false,
-          synonyms: ['washcloth', 'washcloths', 'face cloth', 'facecloth'],
-          incompatible: ['tshirt', 'underwear', 'sock', 'jeans', 'bathrobe', 'heavy_jacket', 'winter_coat', 'hoodie', 'tank_top', 'polo', 'button_up', 'shorts', 'leggings', 'long_sleeve', 'blouse', 'sweater_light', 'sweater_heavy', 'sweatpants', 'dress_pants', 'skirt', 'dress', 'light_jacket', 'medium_jacket']
+          synonyms: ['washcloth', 'wash cloth', 'facecloth', 'face cloth'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'heavy_jacket', 'winter_coat']
         },
 
-        beach_towel: {
-          name: 'Beach Towel',
-          category: 'towels',
-          volume: 0.20,
-          isPaired: false,
-          synonyms: ['beach towel', 'beach towels'],
-          incompatible: ['tshirt', 'underwear', 'sock', 'jeans', 'bathrobe', 'heavy_jacket', 'winter_coat', 'sheet_queen', 'sheet_king', 'hoodie', 'tank_top', 'polo', 'button_up', 'shorts', 'leggings', 'long_sleeve', 'blouse', 'sweater_light', 'sweater_heavy', 'sweatpants', 'dress_pants', 'skirt', 'dress', 'light_jacket', 'medium_jacket']
-        },
-
-        // BEDDING - Sheets
-        sheet_queen: {
-          name: 'Sheet (Queen)',
-          category: 'bulky',
+        bathrobe: {
+          name: 'Bathrobe',
+          category: 'heavy_single',
           volume: 0.40,
           isPaired: false,
-          synonyms: ['sheet', 'sheets', 'queen sheet', 'bed sheet', 'fitted sheet', 'flat sheet'],
-          incompatible: ['bath_towel', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat']
+          synonyms: ['bathrobe', 'robe', 'terry robe', 'bath robe'],
+          incompatible: ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse', 'sweater_light', 'hoodie', 'sweater_heavy', 'underwear', 'sock', 'shorts', 'leggings', 'sweatpants', 'dress_pants', 'athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra', 'dress_light', 'dress_heavy', 'skirt', 'jeans', 'hand_towel', 'bath_towel', 'beach_towel', 'washcloth', 'light_jacket', 'heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_light', 'blanket_heavy']
+        },
+
+        // BEDDING
+        sheet_twin: {
+          name: 'Twin Sheet',
+          category: 'bulky',
+          volume: 0.20,
+          isPaired: false,
+          synonyms: ['twin sheet', 'twin bed sheet', 'single sheet'],
+          incompatible: []
+        },
+
+        sheet_full: {
+          name: 'Full Sheet',
+          category: 'bulky',
+          volume: 0.25,
+          isPaired: false,
+          synonyms: ['full sheet', 'double sheet', 'full bed sheet'],
+          incompatible: []
+        },
+
+        sheet_queen: {
+          name: 'Queen Sheet',
+          category: 'bulky',
+          volume: 0.30,
+          isPaired: false,
+          synonyms: ['queen sheet', 'queen bed sheet'],
+          incompatible: ['heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_heavy']
         },
 
         sheet_king: {
-          name: 'Sheet (King)',
+          name: 'King Sheet',
           category: 'bulky',
-          volume: 0.50,
+          volume: 0.35,
           isPaired: false,
-          synonyms: ['king sheet', 'king size sheet'],
-          incompatible: ['bath_towel', 'beach_towel', 'bathrobe', 'heavy_jacket', 'winter_coat', 'sheet_queen']
+          synonyms: ['king sheet', 'king bed sheet'],
+          incompatible: ['heavy_jacket', 'winter_coat', 'duvet_cover', 'blanket_heavy']
         },
 
         pillowcase: {
@@ -1699,504 +1715,356 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
             dial: 'Delicates',
             temp: 'Cold',
             spin: 'Low',
-            dry: 'Time Dry: 60 min (Low Heat)',
+            dry: 'Time Dry: 30 min Low',
             maxLoad: 0.2,
-            detergent: '1 tbsp gentle detergent',
-            prep: ['Use mesh bags', 'Check periodically']
+            detergent: '1 tbsp gentle/delicate detergent',
+            prep: ['Use mesh laundry bags', 'Fasten all hooks', 'Air dry recommended']
           },
           quick: {
-            recommended: false,
-            reason: 'Delicate items require slow agitation and cannot be rushed.'
+            dial: 'Delicates',
+            temp: 'Cold',
+            spin: 'Low',
+            dry: 'Air Dry',
+            maxLoad: 0.15,
+            detergent: '1/2 tsp gentle detergent',
+            prep: ['Mesh bags required', 'Very light soil only']
           }
         },
         jackets: {
           optimal: {
-            dial: 'Permanent Press',
-            temp: 'Cool',
+            dial: 'Perm Press',
+            temp: 'Warm',
             spin: 'Medium',
-            dry: 'Low Heat, Remove Promptly',
-            maxLoad: 0.4,
-            detergent: '1.5 tbsp regular detergent',
-            prep: ['Close all zippers', 'Turn inside out', 'Empty pockets']
+            dry: 'Time Dry: 60 min',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Zip all zippers', 'Fasten all snaps', '3-4 wool dryer balls']
           },
           extraDry: {
-            dial: 'Permanent Press',
-            temp: 'Cool',
+            dial: 'Perm Press',
+            temp: 'Warm',
             spin: 'Medium',
-            dry: 'Time Dry: 60 min (Low Heat)',
+            dry: 'Time Dry: 90 min',
             maxLoad: 0.3,
-            detergent: '1.5 tbsp regular',
-            prep: ['Close zippers', 'Turn inside out', 'Remove promptly to prevent wrinkles']
+            detergent: '1 tbsp HE powder',
+            prep: ['Zip all zippers', 'Pause at 45 min to shake out', '3-4 wool dryer balls']
           },
           quick: {
-            dial: 'Speed Wash',
-            temp: 'Cold',
-            spin: 'Low',
-            dry: 'Time Dry: 30 min (Low Heat)',
-            maxLoad: 0.2,
-            detergent: '1 tbsp regular',
-            prep: ['Lightly soiled only', 'Close zippers']
+            recommended: false,
+            reason: 'Jackets need gentle care and adequate drying time'
           }
         },
         everyday_technical: {
           optimal: {
-            dial: 'Permanent Press',
-            temp: 'Cool',
-            spin: 'Medium',
-            dry: 'Low Heat',
-            maxLoad: 0.4,
-            detergent: '1.5 tbsp regular detergent',
-            prep: ['Turn inside out to protect prints', 'Close zippers/velcro', 'Separate dark colors']
+            dial: 'Cotton/Normal',
+            temp: 'Cold',
+            spin: 'High',
+            dry: 'Low/Med',
+            maxLoad: 0.5,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn inside out', 'No fabric softener', '3-4 wool dryer balls']
           },
           extraDry: {
-            dial: 'Permanent Press',
-            temp: 'Cool',
-            spin: 'Medium',
-            dry: 'Time Dry: 60 min (Medium Heat)',
-            maxLoad: 0.3,
-            detergent: '1.5 tbsp regular',
-            prep: ['Turn inside out', 'Remove promptly to prevent wrinkles']
+            dial: 'Cotton/Normal',
+            temp: 'Cold',
+            spin: 'High',
+            dry: 'Time Dry: 60 min Low',
+            maxLoad: 0.4,
+            detergent: '1 tbsp HE powder',
+            prep: ['Turn inside out', 'Avoid high heat', '3-4 wool dryer balls']
           },
           quick: {
             dial: 'Speed Wash',
             temp: 'Cold',
-            spin: 'Medium',
-            dry: 'Time Dry: 30 min (Low Heat)',
-            maxLoad: 0.25,
-            detergent: '1 tbsp regular',
-            prep: ['Lightly soiled only', 'Turn inside out']
+            spin: 'Extra High',
+            dry: 'Time Dry: 40 min Low',
+            maxLoad: 0.15,
+            detergent: '1/2 tsp HE powder',
+            prep: ['Lightly soiled only', 'No fabric softener']
           }
         }
       }
     };
 
-    // Quick Add Categories with Subcategories
+    // Quick Add Categories
     const QUICK_ADD_CATEGORIES = {
-      'Shirts': ['tshirt', 'long_sleeve', 'polo', 'button_up', 'tank_top', 'blouse'],
-      'Sweaters': ['hoodie', 'sweater_light', 'sweater_heavy'],
-      'Pants': ['jeans', 'sweatpants', 'leggings', 'shorts', 'dress_pants'],
-      'Dresses & Skirts': ['dress', 'skirt'],
-      'Jackets': ['light_jacket', 'medium_jacket', 'heavy_jacket', 'winter_coat', 'bathrobe'],
+      'Shirts': ['tank_top', 'tshirt', 'long_sleeve', 'polo', 'button_up', 'blouse'],
+      'Sweaters': ['sweater_light', 'hoodie', 'sweater_heavy'],
+      'Pants': ['shorts', 'leggings', 'sweatpants', 'dress_pants', 'jeans'],
+      'Dresses & Skirts': ['dress_light', 'dress_heavy', 'skirt'],
+      'Jackets': ['light_jacket', 'heavy_jacket', 'winter_coat'],
       'Underwear & Socks': ['underwear', 'sock'],
-      'Towels': ['bath_towel', 'hand_towel', 'beach_towel', 'washcloth'],
-      'Bedding': ['sheet_queen', 'sheet_king', 'pillowcase', 'duvet_cover', 'blanket_light', 'blanket_heavy'],
+      'Athletic': ['athletic_shirt', 'athletic_shorts', 'athletic_leggings', 'sports_bra'],
+      'Towels': ['hand_towel', 'bath_towel', 'beach_towel', 'washcloth', 'bathrobe'],
+      'Bedding': ['sheet_twin', 'sheet_full', 'sheet_queen', 'sheet_king', 'pillowcase', 'duvet_cover', 'blanket_light', 'blanket_heavy'],
       'Delicates': ['silk_blouse', 'bra', 'lace_underwear']
     };
 
+    // Valid categories for dropdown
+    const VALID_CATEGORIES = [
+      'everyday',
+      'everyday_technical',
+      'jackets',
+      'towels',
+      'heavy',
+      'heavy_single',
+      'bulky',
+      'delicates'
+    ];
+
     // ========================================
-    // LOCAL STORAGE INITIALIZATION
+    // STATE
+    // ========================================
+    
+    let selectedItems = [];
+    let SYNONYM_DATABASE = {};
+
+    // ========================================
+    // TAB MANAGEMENT
     // ========================================
 
-    function initializeDatabase() {
-      const savedItems = localStorage.getItem('customLaundryItems');
-      if (savedItems) {
-        try {
-          const customItems = JSON.parse(savedItems);
-          // Merge custom items into the main LAUNDRY_DATA
-          Object.assign(LAUNDRY_DATA.items, customItems);
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const targetTab = button.dataset.tab;
           
-          // Update QUICK_ADD_CATEGORIES with new items (defaulting to a "Custom" category if needed)
-          if (!QUICK_ADD_CATEGORIES['Custom Items']) {
-            QUICK_ADD_CATEGORIES['Custom Items'] = [];
+          // Remove active from all buttons and contents
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active to clicked button and corresponding content
+          button.classList.add('active');
+          const targetContent = document.getElementById(`${targetTab}Tab`);
+          if (targetContent) {
+            targetContent.classList.add('active');
           }
-          Object.keys(customItems).forEach(key => {
-            if (!QUICK_ADD_CATEGORIES['Custom Items'].includes(key)) {
-               QUICK_ADD_CATEGORIES['Custom Items'].push(key);
-            }
-          });
           
-          // Rebuild synonym database
-          Object.assign(SYNONYM_DATABASE, buildSynonymDatabase());
-        } catch (e) {
-          console.error("Error loading custom items from localStorage", e);
-        }
-      }
+          // If switching to database tab, render the table
+          if (targetTab === 'database') {
+            renderDatabaseTable();
+          }
+        });
+      });
     }
 
     // ========================================
-    // STATE MANAGEMENT
+    // VOICE RECOGNITION
     // ========================================
 
-    let selectedItems = [];
-    let transcript = '';
-    let voiceState = 'idle'; // 'idle' | 'listening' | 'processing' | 'success'
     let recognition = null;
-
-    // ========================================
-    // VOICE RECOGNITION SETUP
-    // ========================================
+    let isListening = false;
 
     function initVoiceRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      
-      if (!SpeechRecognition) {
-        document.getElementById('voiceButton').style.display = 'none';
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        console.warn('Speech recognition not supported');
         return;
       }
 
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
 
       recognition.onstart = () => {
-        setVoiceState('listening');
-      };
-
-      recognition.onend = () => {
-        if (voiceState === 'listening') {
-          setVoiceState('processing');
-        }
+        console.log('Voice recognition started');
       };
 
       recognition.onresult = (event) => {
-        const result = event.results[0][0].transcript;
-        transcript = result;
-        
-        setVoiceState('success');
-        
-        setTimeout(() => {
-          parseVoiceInput(result);
-          updateTranscript(result);
-          setVoiceState('idle');
-          generateResults();
-        }, 300);
+        const transcript = event.results[0][0].transcript;
+        console.log('Recognized:', transcript);
+        handleVoiceResult(transcript);
       };
 
       recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
-        setVoiceState('idle');
+        resetVoiceButton();
       };
+
+      recognition.onend = () => {
+        console.log('Voice recognition ended');
+        isListening = false;
+      };
+
+      // Build synonym database for faster lookups
+      SYNONYM_DATABASE = buildSynonymDatabase();
     }
 
-    function setVoiceState(state) {
-      voiceState = state;
-      const button = document.getElementById('voiceButton');
-      const statusText = button.querySelector('.voice-status');
-      
-      button.className = 'voice-button';
-      
-      switch(state) {
-        case 'listening':
-          button.classList.add('listening');
-          statusText.textContent = 'Listening...';
-          break;
-        case 'processing':
-          button.classList.add('processing');
-          statusText.textContent = 'Processing...';
-          break;
-        case 'success':
-          button.classList.add('success');
-          statusText.textContent = 'Got it!';
-          break;
-        default: // idle
-          statusText.textContent = 'Tap to speak';
-      }
-    }
-
-    function startVoiceRecognition() {
-      if (!recognition) return;
-      
-      if (voiceState === 'listening') {
-        recognition.stop();
-        setVoiceState('idle');
-      } else {
-        try {
-          recognition.start();
-        } catch (error) {
-          console.error('Error starting recognition:', error);
-        }
-      }
-    }
-
-    // ========================================
-    // VOICE INPUT PARSING
-    // ========================================
-
-    // Build comprehensive synonym database from LAUNDRY_DATA
     function buildSynonymDatabase() {
-      const synonymMap = {};
+      const db = {};
       
-      for (const [itemKey, itemData] of Object.entries(LAUNDRY_DATA.items)) {
+      Object.entries(LAUNDRY_DATA.items).forEach(([itemKey, itemData]) => {
         if (itemData.synonyms) {
           itemData.synonyms.forEach(synonym => {
-            synonymMap[synonym.toLowerCase()] = itemKey;
-          });
-        }
-      }
-      
-      return synonymMap;
-    }
-
-    const SYNONYM_DATABASE = buildSynonymDatabase();
-
-    // Call this immediately to merge data before the app renders chips
-    initializeDatabase();
-
-    function parseVoiceInput(text) {
-      const lowerText = text.toLowerCase();
-      const extractedItems = [];
-
-      // Quantity words mapping
-      const quantityWords = {
-        'a': 1, 'an': 1, 'one': 1,
-        'two': 2, 'three': 3, 'four': 4, 'five': 5,
-        'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-        'some': 4, 'few': 3, 'several': 5, 'bunch': 5
-      };
-
-      // First, detect patterns with "pairs of" for paired items
-      // Updated to allow up to 3 words between "of" and the item (e.g., "3 pairs of athletic white socks")
-      const pairsPattern = /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+pairs?\s+of\s+(?:\w+\s+){0,3}(\w+(?:\s+\w+)?)/gi;
-      const pairsMatches = lowerText.matchAll(pairsPattern);
-      
-      for (const match of pairsMatches) {
-        const quantityStr = match[1].toLowerCase();
-        const quantity = quantityWords[quantityStr] || parseInt(quantityStr) || 1;
-        
-        // Extract all words after "of"
-        const afterOf = match[0].split(/pairs?\s+of\s+/i)[1];
-        const words = afterOf.trim().split(/\s+/);
-        
-        // Try each word and combination to find a match
-        let itemKey = null;
-        for (let i = 0; i < words.length && !itemKey; i++) {
-          for (let j = words.length; j > i && !itemKey; j--) {
-            const candidate = words.slice(i, j).join(' ').toLowerCase().trim();
-            itemKey = SYNONYM_DATABASE[candidate] || 
-                     SYNONYM_DATABASE[candidate + 's'] || 
-                     SYNONYM_DATABASE[candidate.replace(/s$/, '')];
-          }
-        }
-        
-        if (itemKey) {
-          const itemData = LAUNDRY_DATA.items[itemKey];
-          
-          // Calculate actual quantity for paired items
-          let actualQuantity = quantity;
-          if (itemData.isPaired && itemData.pairMultiplier) {
-            actualQuantity = quantity * itemData.pairMultiplier;
-          }
-          
-          // Check if item already extracted
-          const existing = extractedItems.find(item => item.item === itemKey);
-          if (existing) {
-            existing.quantity += actualQuantity;
-            existing.displayQuantity = (existing.displayQuantity || existing.quantity) + quantity;
-            existing.hasPairsKeyword = true;
-          } else {
-            extractedItems.push({ 
-              item: itemKey, 
-              quantity: actualQuantity,
-              displayQuantity: quantity,
-              hasPairsKeyword: true
-            });
-          }
-        }
-      }
-
-      // Then extract all other items (without "pairs of" keyword)
-      // Updated to allow up to 4 words between quantity and item (e.g., "2 black long sleeve shirts")
-      for (const [synonym, itemKey] of Object.entries(SYNONYM_DATABASE)) {
-        // Skip if already matched with pairs pattern
-        const alreadyMatched = extractedItems.some(item => item.item === itemKey && item.hasPairsKeyword);
-        if (alreadyMatched) continue;
-        
-        // Escape special regex characters in synonym
-        const escapedSynonym = synonym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        
-        const patterns = [
-          // Handle numeric quantities with up to 4 intervening words (e.g., "2 black shirts")
-          new RegExp(`(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)\\s+(?:\\w+\\s+){0,4}${escapedSynonym}s?(?!\\w)`, 'gi'),
-          // Handle "some/few/several" with optional "of"
-          new RegExp(`(some|few|several|bunch)\\s+(?:of\\s+)?(?:\\w+\\s+){0,4}${escapedSynonym}s?(?!\\w)`, 'gi'),
-          // Handle "a/an/one" patterns
-          new RegExp(`(a|an|one)\\s+(?:\\w+\\s+){0,4}${escapedSynonym}(?!\\w)`, 'gi')
-        ];
-
-        patterns.forEach(pattern => {
-          const matches = lowerText.matchAll(pattern);
-          for (const match of matches) {
-            const quantityStr = match[1].toLowerCase();
-            const quantity = quantityWords[quantityStr] || parseInt(quantityStr) || 1;
-            
-            // For non-pairs mentions, use actual quantity directly
-            const existing = extractedItems.find(item => item.item === itemKey);
-            if (existing && !existing.hasPairsKeyword) {
-              existing.quantity += quantity;
-            } else if (!existing) {
-              extractedItems.push({ 
-                item: itemKey, 
-                quantity: quantity,
-                hasPairsKeyword: false
-              });
-            }
-          }
-        });
-      }
-
-      // Add extracted items to selectedItems
-      extractedItems.forEach(extracted => {
-        const existing = selectedItems.find(item => item.item === extracted.item);
-        if (existing) {
-          existing.quantity += extracted.quantity;
-          if (extracted.hasPairsKeyword) {
-            existing.displayQuantity = (existing.displayQuantity || existing.quantity) + (extracted.displayQuantity || extracted.quantity);
-            existing.hasPairsKeyword = true;
-          }
-        } else {
-          selectedItems.push({
-            item: extracted.item,
-            quantity: extracted.quantity,
-            displayQuantity: extracted.displayQuantity,
-            hasPairsKeyword: extracted.hasPairsKeyword
+            const normalizedSynonym = synonym.toLowerCase().trim();
+            db[normalizedSynonym] = itemKey;
           });
         }
       });
-
-      updateChipsDisplay();
+      
+      return db;
     }
 
-    // Manual Text Input Handler
+    function startVoiceRecognition() {
+      if (!recognition || isListening) return;
+      
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('success');
+      button.classList.add('listening');
+      button.querySelector('.voice-status').textContent = 'Listening...';
+      
+      isListening = true;
+      recognition.start();
+    }
+
+    function handleVoiceResult(transcript) {
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('listening');
+      button.classList.add('processing');
+      button.querySelector('.voice-status').textContent = 'Processing...';
+      
+      displayTranscript(transcript);
+      parseAndAddItems(transcript);
+      
+      setTimeout(() => {
+        button.classList.remove('processing');
+        button.classList.add('success');
+        button.querySelector('.voice-status').textContent = 'Got it!';
+        
+        setTimeout(() => {
+          resetVoiceButton();
+        }, 1500);
+      }, 800);
+    }
+
+    function resetVoiceButton() {
+      const button = document.getElementById('voiceButton');
+      button.classList.remove('listening', 'processing', 'success');
+      button.querySelector('.voice-status').textContent = 'Tap to Speak';
+    }
+
+    // ========================================
+    // MANUAL TEXT INPUT
+    // ========================================
+
     function handleManualInput() {
       const input = document.getElementById('manualInput');
       const text = input.value.trim();
       
       if (!text) return;
       
-      // Parse the input using the same logic as voice
-      const parsedItems = parseManualText(text);
+      displayTranscript(text);
+      parseAndAddItems(text);
       
-      if (parsedItems.length === 0) {
-        // Show error feedback
-        input.style.borderColor = '#EF4444';
-        input.placeholder = 'No items found. Try: "3 t-shirts, 2 jeans"';
-        setTimeout(() => {
-          input.style.borderColor = 'rgba(217, 119, 6, 0.3)';
-          input.placeholder = 'e.g., 3 t-shirts, 2 jeans, 1 hoodie';
-        }, 2000);
-        return;
-      }
+      input.value = '';
+    }
+
+    // ========================================
+    // ITEM PARSING & MANAGEMENT
+    // ========================================
+
+    function parseAndAddItems(text) {
+      const lowerText = text.toLowerCase();
       
-      // Add items to selectedItems
-      parsedItems.forEach(({ item, quantity }) => {
-        // Check if item already exists in selectedItems
-        const existingIndex = selectedItems.findIndex(s => s.item === item);
-        
-        if (existingIndex !== -1) {
-          // Increment quantity
-          selectedItems[existingIndex].quantity += quantity;
-        } else {
-          // Add new item
-          selectedItems.push({ item, quantity });
+      // Detect "pairs" keyword for paired items
+      const hasPairsKeyword = /\b(\d+)\s*(pairs?\s+of)\s+(\w+)/i.test(text);
+      
+      // Extract quantity and item patterns
+      const patterns = [
+        /\b(\d+)\s*(pairs?\s+of)?\s+([a-z\s-]+?)(?=\s+and\b|\s*,|\s*$)/gi,
+        /\b([a-z\s-]+?)\s*\((\d+)\)/gi
+      ];
+      
+      let foundItems = [];
+      
+      patterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.exec(lowerText)) !== null) {
+          let quantity, itemName;
+          
+          if (match[2]) {
+            quantity = parseInt(match[1]);
+            itemName = match[3].trim();
+          } else if (match.length === 3 && !isNaN(match[1])) {
+            quantity = parseInt(match[1]);
+            itemName = match[3] || match[2];
+            if (itemName) itemName = itemName.trim();
+          } else {
+            itemName = match[1].trim();
+            quantity = parseInt(match[2]) || 1;
+          }
+          
+          if (itemName) {
+            foundItems.push({ quantity, itemName, hasPairsKeyword: hasPairsKeyword && match[2] });
+          }
         }
       });
       
-      // Clear input
-      input.value = '';
-      
-      // Show success feedback
-      input.style.borderColor = '#10B981';
-      setTimeout(() => {
-        input.style.borderColor = 'rgba(217, 119, 6, 0.3)';
-      }, 800);
-      
-      // Update UI
-      updateChipsDisplay();
-      generateResults();
-      
-      // Update transcript to show what was added
-      const itemNames = parsedItems.map(p => {
-        const itemData = LAUNDRY_DATA.items[p.item];
-        return `${p.quantity} ${itemData.name}${p.quantity > 1 ? 's' : ''}`;
-      }).join(', ');
-      
-      updateTranscript(`Added: ${itemNames}`);
-    }
-
-    // Parse manual text input (comma-separated items)
-    function parseManualText(text) {
-      const lowerText = text.toLowerCase();
-      const extractedItems = [];
-      
-      // Quantity words mapping
-      const quantityWords = {
-        'a': 1, 'an': 1, 'one': 1,
-        'two': 2, 'three': 3, 'four': 4, 'five': 5,
-        'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
-        'some': 4, 'few': 3, 'several': 5, 'bunch': 5
-      };
-
-      // Split by commas or "and" to handle lists
-      const segments = lowerText.split(/,|\band\b/);
-      
-      // Sort SYNONYM_DATABASE entries by synonym length (longest first) for better matching
-      const sortedSynonyms = Object.entries(SYNONYM_DATABASE).sort((a, b) => b[0].length - a[0].length);
-      
-      segments.forEach(segment => {
-        const trimmed = segment.trim();
-        if (!trimmed) return;
+      // Match items against synonym database
+      foundItems.forEach(({ quantity, itemName, hasPairsKeyword }) => {
+        const itemKey = SYNONYM_DATABASE[itemName];
         
-        let foundMatch = false; // Track if we found a match for this segment
-        
-        // Try to match patterns like "3 t-shirts" or "2 pairs of socks"
-        for (const [synonym, itemKey] of sortedSynonyms) {
-          if (foundMatch) break; // Stop checking synonyms once we find a match
+        if (itemKey) {
+          const existingItem = selectedItems.find(item => item.item === itemKey);
+          const itemData = LAUNDRY_DATA.items[itemKey];
           
-          const escapedSynonym = synonym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          
-          const patterns = [
-            // Numeric quantities
-            new RegExp(`^(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)\\s+(?:\\w+\\s+)*${escapedSynonym}s?$`, 'i'),
-            // Pairs pattern
-            new RegExp(`^(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)\\s+pairs?\\s+(?:of\\s+)?(?:\\w+\\s+)*${escapedSynonym}s?$`, 'i'),
-            // "some/few/several" 
-            new RegExp(`^(some|few|several|bunch)\\s+(?:of\\s+)?(?:\\w+\\s+)*${escapedSynonym}s?$`, 'i'),
-            // Just the item name (default to 1)
-            new RegExp(`^${escapedSynonym}s?$`, 'i')
-          ];
-          
-          for (const pattern of patterns) {
-            const match = trimmed.match(pattern);
-            if (match) {
-              const quantityStr = match[1]?.toLowerCase() || '1';
-              let quantity = quantityWords[quantityStr] || parseInt(quantityStr) || 1;
-              
-              // Check for paired items
-              const itemData = LAUNDRY_DATA.items[itemKey];
-              if (itemData && itemData.isPaired && itemData.pairMultiplier) {
-                // If they said "pairs of", don't multiply again
-                if (trimmed.includes('pair')) {
-                  quantity = quantity * itemData.pairMultiplier;
-                } else {
-                  // Default: multiply by 2 for paired items
-                  quantity = quantity * itemData.pairMultiplier;
-                }
-              }
-              
-              // Check if already extracted
-              const existing = extractedItems.find(e => e.item === itemKey);
-              if (existing) {
-                existing.quantity += quantity;
-              } else {
-                extractedItems.push({ item: itemKey, quantity });
-              }
-              
-              foundMatch = true; // Mark that we found a match
-              break; // Found a match, move to next pattern
+          if (existingItem) {
+            if (hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+              const actualQuantity = quantity * itemData.pairMultiplier;
+              existingItem.quantity += actualQuantity;
+              existingItem.displayQuantity = (existingItem.displayQuantity || (existingItem.quantity / itemData.pairMultiplier)) + quantity;
+              existingItem.hasPairsKeyword = true;
+            } else {
+              existingItem.quantity += quantity;
+            }
+          } else {
+            if (hasPairsKeyword && itemData.isPaired && itemData.displayAs === 'pair') {
+              const actualQuantity = quantity * itemData.pairMultiplier;
+              selectedItems.push({
+                item: itemKey,
+                quantity: actualQuantity,
+                displayQuantity: quantity,
+                hasPairsKeyword: true
+              });
+            } else {
+              selectedItems.push({
+                item: itemKey,
+                quantity: quantity,
+                hasPairsKeyword: false
+              });
             }
           }
         }
       });
       
-      return extractedItems;
+      updateChipsDisplay();
+      generateResults();
     }
 
-    // ========================================
-    // UI UPDATES
-    // ========================================
+    function checkIncompatibilities() {
+      const incompatibilities = [];
+      
+      for (let i = 0; i < selectedItems.length; i++) {
+        for (let j = i + 1; j < selectedItems.length; j++) {
+          const item1 = LAUNDRY_DATA.items[selectedItems[i].item];
+          const item2Key = selectedItems[j].item;
+          
+          if (item1.incompatible && item1.incompatible.includes(item2Key)) {
+            incompatibilities.push({
+              item1: item1.name,
+              item2: LAUNDRY_DATA.items[item2Key].name
+            });
+          }
+        }
+      }
+      
+      return incompatibilities;
+    }
 
-    function updateTranscript(text) {
+    function displayTranscript(text) {
       const transcriptEl = document.getElementById('transcript');
       transcriptEl.textContent = text;
       transcriptEl.classList.remove('empty');
@@ -2398,275 +2266,76 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
       const loadWarning = totalLoad > 0.5 ? 'Load exceeds 50% safe drying capacity!' : '';
       
       html += `
-        <div class="load-indicator">
-          <h3>Drum Capacity</h3>
-          <div class="load-bar-container">
-            <div class="load-bar" style="width: ${loadPercentage}%">
-              ${loadPercentage}%
+        <div class="results-section">
+          <h2>Wash Recommendations</h2>
+          
+          <div class="load-indicator">
+            <h3>Drum Load: ${loadPercentage}%</h3>
+            <div class="load-bar">
+              <div class="load-bar-fill" style="width: ${loadPercentage}%">${loadPercentage}%</div>
             </div>
+            ${loadWarning ? `<div class="load-warning">${loadWarning}</div>` : ''}
           </div>
-          <p>${selectedItems.reduce((sum, item) => sum + item.quantity, 0)} items • ${(totalLoad * 100).toFixed(0)}% capacity</p>
-          ${loadWarning ? `<p class="load-warning">${loadWarning}</p>` : ''}
-        </div>
       `;
 
-      // Warnings
-      if (incompatibilities.length > 0 || category === 'heavy_single') {
-        html += '<div class="warnings">';
-        
-        if (category === 'heavy_single') {
-          html += `
-            <div class="warning-card">
-              <h3>
-                <svg class="warning-icon" viewBox="0 0 24 24">
-                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                  <line x1="12" y1="9" x2="12" y2="13"></line>
-                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-                UE Error Prevention
-              </h3>
-              <p><strong>Heavy single items must wash alone.</strong></p>
-              <p>This prevents unbalanced loads that cause the machine to walk or throw UE errors.</p>
-              <ul>
-                <li>Use Medium spin speed (never Extra High)</li>
-                <li>Do not mix with other items</li>
-                <li>Ensure item can tumble freely</li>
-              </ul>
-            </div>
-          `;
-        }
-
-        incompatibilities.forEach(conflict => {
-          html += `
-            <div class="warning-card">
-              <h3>
-                <svg class="warning-icon" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="15" y1="9" x2="9" y2="15"></line>
-                  <line x1="9" y1="9" x2="15" y2="15"></line>
-                </svg>
-                Incompatible Items
-              </h3>
-              <p><strong>Don't mix: ${conflict.items.join(' and ')}</strong></p>
-              <p>${conflict.reason}</p>
-              <p><em>Suggestion: Split into separate loads</em></p>
-            </div>
-          `;
-        });
-
-        // Hot water warning
-        const template = LAUNDRY_DATA.cycleTemplates[category];
-        if (template.optimal.temp === 'Hot' || template.optimal.temp === 'Warm') {
-          html += `
-            <div class="warning-card">
-              <h3>
-                <svg class="warning-icon" viewBox="0 0 24 24">
-                  <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
-                </svg>
-                ${template.optimal.temp} Water Alert
-              </h3>
-              <p><strong>This cycle uses ${template.optimal.temp.toLowerCase()} water.</strong></p>
-              <p>Wait 30-45 minutes before showering to allow hot water tank to refill.</p>
-            </div>
-          `;
-        }
-
-        html += '</div>';
-      }
-
-      // Cycle Cards
-      const template = LAUNDRY_DATA.cycleTemplates[category];
-      html += '<div class="cycles-grid">';
-      
-      // Optimal
-      html += renderCycleCard('Optimal', 'Balanced wash & dry', template.optimal);
-      
-      // Extra Dry
-      html += renderCycleCard('Extra Dry', 'For damp-free results', template.extraDry);
-      
-      // Quick
-      if (template.quick.recommended === false) {
+      // Incompatibility Warnings
+      if (incompatibilities.length > 0) {
         html += `
-          <div class="cycle-card not-recommended">
-            <div class="cycle-header">
-              <h3 class="cycle-title">Quick</h3>
-              <p class="cycle-subtitle">Not Recommended</p>
-            </div>
-            <p><strong>Reason:</strong> ${template.quick.reason}</p>
+          <div class="alert-box">
+            <div class="alert-title">⚠️ Incompatible Items Detected</div>
+            <ul class="alert-list">
+              ${incompatibilities.map(inc => `<li>${inc.item1} and ${inc.item2} should not be washed together</li>`).join('')}
+            </ul>
           </div>
         `;
-      } else {
-        html += renderCycleCard('Quick', 'Fast wash for light loads', template.quick);
       }
+
+      // Cycle Settings
+      const template = LAUNDRY_DATA.cycleTemplates[category];
+      if (template) {
+        html += `
+          <div class="settings-card">
+            <h3>Recommended Cycle: ${category.replace('_', ' ').toUpperCase()}</h3>
+            <div class="settings-grid">
+              <div class="setting-row">
+                <span class="setting-label">Dial Setting</span>
+                <span class="setting-value">${template.optimal.dial}</span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-label">Temperature</span>
+                <span class="setting-value">${template.optimal.temp}</span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-label">Spin Speed</span>
+                <span class="setting-value">${template.optimal.spin}</span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-label">Dry Cycle</span>
+                <span class="setting-value">${template.optimal.dry}</span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-label">Detergent</span>
+                <span class="setting-value">${template.optimal.detergent}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Preparation Steps</h3>
+            <ul style="list-style-position: inside; color: #FFFBEB;">
+              ${template.optimal.prep.map(step => `<li>${step}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
       
-      html += '</div>';
-
-      // Reset Button
-      html += `
-        <div class="reset-section">
-          <button class="reset-button" onclick="resetApp()">
-            Start New Load
-          </button>
-        </div>
-      `;
-
       document.getElementById('results').innerHTML = html;
     }
 
-    function renderCycleCard(title, subtitle, settings) {
-      return `
-        <div class="cycle-card">
-          <div class="cycle-header">
-            <h3 class="cycle-title">${title}</h3>
-            <p class="cycle-subtitle">${subtitle}</p>
-          </div>
-          
-          <div class="cycle-section">
-            <h4>Machine Settings</h4>
-            <div class="setting-row">
-              <span class="setting-label">Dial</span>
-              <span class="setting-value">${settings.dial}</span>
-            </div>
-            <div class="setting-row">
-              <span class="setting-label">Temp</span>
-              <span class="setting-value">${settings.temp}</span>
-            </div>
-            <div class="setting-row">
-              <span class="setting-label">Spin</span>
-              <span class="setting-value">${settings.spin}</span>
-            </div>
-            <div class="setting-row">
-              <span class="setting-label">Dry</span>
-              <span class="setting-value">${settings.dry}</span>
-            </div>
-            <div class="setting-row">
-              <span class="setting-label">Max Load</span>
-              <span class="setting-value">${Math.round(settings.maxLoad * 100)}%</span>
-            </div>
-          </div>
-
-          <div class="cycle-section">
-            <h4>Detergent</h4>
-            <p>${settings.detergent}</p>
-          </div>
-
-          <div class="cycle-section">
-            <h4>Prep Instructions</h4>
-            <ul class="prep-list">
-              ${settings.prep.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-          </div>
-        </div>
-      `;
-    }
-
-    function checkIncompatibilities() {
-      const conflicts = [];
-      const itemsMap = new Map();
-      
-      // Build map of items
-      selectedItems.forEach(selected => {
-        itemsMap.set(selected.item, LAUNDRY_DATA.items[selected.item]);
-      });
-
-      // Check each item against others
-      for (const [itemKey1, itemData1] of itemsMap.entries()) {
-        for (const [itemKey2, itemData2] of itemsMap.entries()) {
-          if (itemKey1 >= itemKey2) continue; // Avoid duplicates
-          
-          // Check if item1 is incompatible with item2
-          if (itemData1.incompatible.includes('*') || itemData1.incompatible.includes(itemKey2)) {
-            const reason = getIncompatibilityReason(itemKey1, itemKey2, itemData1, itemData2);
-            conflicts.push({
-              items: [itemData1.name, itemData2.name],
-              reason: reason
-            });
-          }
-        }
-      }
-
-      return conflicts;
-    }
-
-    function getIncompatibilityReason(item1, item2, data1, data2) {
-      // Heavy singles must wash alone
-      if (data1.incompatible.includes('*')) {
-        return `${data1.name} must wash completely alone to prevent UE errors and ensure proper cleaning.`;
-      }
-      if (data2.incompatible.includes('*')) {
-        return `${data2.name} must wash completely alone to prevent UE errors and ensure proper cleaning.`;
-      }
-
-      // Towels conflicts
-      if ((item1 === 'towel' && item2 === 'tshirt') || (item1 === 'tshirt' && item2 === 'towel')) {
-        return 'Towels require Hot water cycles; t-shirts work best with Cold/Warm. Different temperature needs.';
-      }
-      if ((item1 === 'towel' && item2 === 'sock') || (item1 === 'sock' && item2 === 'towel')) {
-        return 'Towels need Hot water, socks are fine with Warm/Cold. Temperature conflict.';
-      }
-      if ((item1 === 'towel' && item2 === 'sheet') || (item1 === 'sheet' && item2 === 'towel')) {
-        return 'Both towels and sheets are bulky/absorbent. Together they exceed safe 50% drying capacity.';
-      }
-
-      // Jeans conflicts
-      if ((item1 === 'jeans' && (item2 === 'underwear' || item2 === 'sock' || item2 === 'tshirt')) ||
-          (item2 === 'jeans' && (item1 === 'underwear' || item1 === 'sock' || item1 === 'tshirt'))) {
-        return 'Heavy denim requires Medium spin and extra rinse. Light items need different treatment.';
-      }
-
-      return 'These items have conflicting wash requirements (temperature, spin speed, or fabric type).';
-    }
-
     // ========================================
-    // RESET FUNCTIONALITY
-    // ========================================
-
-    function resetApp() {
-      selectedItems = [];
-      transcript = '';
-      
-      const transcriptEl = document.getElementById('transcript');
-      transcriptEl.textContent = 'Say something like: "I have 3 towels and some t-shirts"';
-      transcriptEl.classList.add('empty');
-      
-      document.getElementById('results').innerHTML = '';
-      
-      updateChipsDisplay();
-      setVoiceState('idle');
-      
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ========================================
-    // TABS FUNCTIONALITY
-    // ========================================
-
-    function initTabs() {
-      const tabButtons = document.querySelectorAll('.tab-button');
-      const tabContents = document.querySelectorAll('.tab-content');
-      
-      tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const tabName = button.dataset.tab;
-          
-          // Remove active class from all buttons and contents
-          tabButtons.forEach(btn => btn.classList.remove('active'));
-          tabContents.forEach(content => content.classList.remove('active'));
-          
-          // Add active class to clicked button and corresponding content
-          button.classList.add('active');
-          document.getElementById(tabName + 'Tab').classList.add('active');
-          
-          // If switching to database tab, render it
-          if (tabName === 'database') {
-            renderDatabaseTable();
-          }
-        });
-      });
-    }
-
-    // ========================================
-    // DATABASE TABLE FUNCTIONALITY
+    // DATABASE TABLE
     // ========================================
 
     function renderDatabaseTable(filterCategory = 'all') {
@@ -2710,6 +2379,7 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
       let html = `
         <thead>
           <tr>
+            <th>#</th>
             <th>Item Name</th>
             <th>Category</th>
             <th>Volume (%)</th>
@@ -2717,7 +2387,6 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
             <th>Temp</th>
             <th>Spin</th>
             <th>Dry</th>
-            <th>Synonyms</th>
           </tr>
         </thead>
         <tbody>
@@ -2728,8 +2397,8 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
         a[1].name.localeCompare(b[1].name)
       );
       
-      // Build table rows
-      sortedItems.forEach(([itemKey, itemData]) => {
+      // Build table rows with expandable details
+      sortedItems.forEach(([itemKey, itemData], index) => {
         const category = itemData.category;
         const hideClass = (filterCategory !== 'all' && category !== filterCategory) ? 'hidden' : '';
         const volumePercent = Math.round(itemData.volume * 100);
@@ -2743,14 +2412,11 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
           ? `Yes (${itemData.pairMultiplier}x)` 
           : 'No';
         
-        // Synonyms list (limit to first 3)
-        const synonymsList = itemData.synonyms 
-          ? itemData.synonyms.slice(0, 3).join(', ') + (itemData.synonyms.length > 3 ? '...' : '')
-          : 'N/A';
-        
+        // Main row
         html += `
-          <tr class="${hideClass}" data-category="${category}">
-            <td><strong>${itemData.name}</strong></td>
+          <tr class="${hideClass}" data-category="${category}" data-row-id="row-${index}" onclick="toggleExpandRow('row-${index}')">
+            <td>${index + 1}</td>
+            <td><span class="expand-icon">▶</span><strong>${itemData.name}</strong></td>
             <td><span class="category-badge category-${category}">${category.replace('_', ' ')}</span></td>
             <td>
               <div class="volume-bar">
@@ -2764,13 +2430,73 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
             <td>${settings.temp}</td>
             <td>${settings.spin}</td>
             <td>${settings.dry}</td>
-            <td style="font-size: 0.85rem; color: #A8A29E;">${synonymsList}</td>
+          </tr>
+        `;
+        
+        // Expanded details row
+        const synonymsList = itemData.synonyms && itemData.synonyms.length > 0
+          ? itemData.synonyms.map(s => `<span class="synonym-badge">${s}</span>`).join('')
+          : '<span style="color: #78716C;">None</span>';
+        
+        const incompatibleList = itemData.incompatible && itemData.incompatible.length > 0
+          ? itemData.incompatible.map(key => {
+              const incompItem = LAUNDRY_DATA.items[key];
+              return `<span class="incompatible-badge">${incompItem ? incompItem.name : key}</span>`;
+            }).join('')
+          : '<span style="color: #78716C;">None</span>';
+        
+        html += `
+          <tr class="expanded-details" id="details-row-${index}" data-category="${category}">
+            <td colspan="8">
+              <div class="expanded-content">
+                <div class="detail-section">
+                  <div class="detail-label">Item Key:</div>
+                  <div class="detail-value"><code>${itemKey}</code></div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">All Synonyms:</div>
+                  <div class="synonym-list">${synonymsList}</div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">Incompatible Items:</div>
+                  <div class="incompatible-list">${incompatibleList}</div>
+                </div>
+                
+                <div class="detail-section">
+                  <div class="detail-label">Full Settings:</div>
+                  <div class="detail-value">
+                    <strong>Dial:</strong> ${settings.dial || 'N/A'}<br>
+                    <strong>Max Load:</strong> ${cycleTemplate ? (cycleTemplate.optimal.maxLoad * 100) + '%' : 'N/A'}
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
         `;
       });
       
       html += '</tbody>';
       table.innerHTML = html;
+    }
+
+    function toggleExpandRow(rowId) {
+      const mainRow = document.querySelector(`tr[data-row-id="${rowId}"]`);
+      const detailsRow = document.getElementById(`details-${rowId}`);
+      
+      if (!mainRow || !detailsRow) return;
+      
+      // Toggle expanded state
+      const isExpanded = mainRow.classList.contains('expanded');
+      
+      if (isExpanded) {
+        mainRow.classList.remove('expanded');
+        detailsRow.classList.remove('show');
+      } else {
+        mainRow.classList.add('expanded');
+        detailsRow.classList.add('show');
+      }
     }
 
     function initDatabaseFilters() {
@@ -2869,27 +2595,107 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
         pendingCustomItem = parsedData;
         pendingCustomKey = parsedData.name.toLowerCase().replace(/\s+/g, '_');
         
-        const template = LAUNDRY_DATA.cycleTemplates[parsedData.category];
-        const temp = template ? template.optimal.temp : "Unknown";
-        const spin = template ? template.optimal.spin : "Unknown";
-
-        const previewHtml = `
-          <p><strong>Item Key:</strong> ${pendingCustomKey}</p>
-          <p><strong>Name:</strong> ${parsedData.name}</p>
-          <p><strong>Assigned Category:</strong> ${parsedData.category}</p>
-          <p><strong>Volume:</strong> ${(parsedData.volume * 100).toFixed(0)}%</p>
-          <p><strong>Applied Settings:</strong> ${temp} Temp, ${spin} Spin</p>
-        `;
+        // Populate editable fields
+        document.getElementById('editKey').value = pendingCustomKey;
+        document.getElementById('editName').value = parsedData.name;
+        document.getElementById('editCategory').value = parsedData.category;
+        document.getElementById('editVolume').value = parsedData.volume;
+        document.getElementById('editSynonyms').value = (parsedData.synonyms || []).join(', ');
+        document.getElementById('editIncompatible').value = (parsedData.incompatible || []).join(', ');
         
-        document.getElementById('previewContent').innerHTML = previewHtml;
+        // Show preview section
         document.getElementById('previewSection').style.display = 'block';
+        
+        // Add validation listeners
+        initValidation();
       } catch (e) {
         alert("Invalid JSON. Please ensure you pasted the exact AI output. Error: " + e.message);
       }
     }
 
+    function initValidation() {
+      const nameInput = document.getElementById('editName');
+      const categoryInput = document.getElementById('editCategory');
+      const volumeInput = document.getElementById('editVolume');
+      
+      nameInput.addEventListener('input', () => validateField('name'));
+      categoryInput.addEventListener('change', () => validateField('category'));
+      volumeInput.addEventListener('input', () => validateField('volume'));
+      
+      // Update key when name changes
+      nameInput.addEventListener('input', () => {
+        const newKey = nameInput.value.toLowerCase().replace(/\s+/g, '_');
+        document.getElementById('editKey').value = newKey;
+      });
+    }
+
+    function validateField(fieldName) {
+      let isValid = true;
+      let input, errorEl;
+      
+      if (fieldName === 'name') {
+        input = document.getElementById('editName');
+        errorEl = document.getElementById('errorName');
+        isValid = input.value.trim().length > 0;
+      } else if (fieldName === 'category') {
+        input = document.getElementById('editCategory');
+        errorEl = document.getElementById('errorCategory');
+        isValid = VALID_CATEGORIES.includes(input.value);
+      } else if (fieldName === 'volume') {
+        input = document.getElementById('editVolume');
+        errorEl = document.getElementById('errorVolume');
+        const val = parseFloat(input.value);
+        isValid = !isNaN(val) && val >= 0.01 && val <= 1.0;
+      }
+      
+      if (isValid) {
+        input.classList.remove('error');
+        errorEl.classList.remove('show');
+      } else {
+        input.classList.add('error');
+        errorEl.classList.add('show');
+      }
+      
+      return isValid;
+    }
+
+    function validateAllFields() {
+      const nameValid = validateField('name');
+      const categoryValid = validateField('category');
+      const volumeValid = validateField('volume');
+      
+      return nameValid && categoryValid && volumeValid;
+    }
+
     function saveCustomItem() {
-      if (!pendingCustomItem || !pendingCustomKey) return;
+      // Validate all fields
+      if (!validateAllFields()) {
+        alert("Please fix the highlighted errors before saving.");
+        return;
+      }
+
+      // Collect values from editable fields
+      const customKey = document.getElementById('editKey').value;
+      const customName = document.getElementById('editName').value.trim();
+      const customCategory = document.getElementById('editCategory').value;
+      const customVolume = parseFloat(document.getElementById('editVolume').value);
+      const customSynonyms = document.getElementById('editSynonyms').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+      const customIncompatible = document.getElementById('editIncompatible').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+      
+      const finalItem = {
+        name: customName,
+        category: customCategory,
+        volume: customVolume,
+        synonyms: customSynonyms,
+        incompatible: customIncompatible,
+        isPaired: false
+      };
 
       // Fetch existing custom items from localStorage
       let customItems = {};
@@ -2899,25 +2705,25 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
       }
 
       // Add the new item
-      customItems[pendingCustomKey] = pendingCustomItem;
+      customItems[customKey] = finalItem;
       
       // Save back to localStorage
       localStorage.setItem('customLaundryItems', JSON.stringify(customItems));
       
       // Update current session state
-      LAUNDRY_DATA.items[pendingCustomKey] = pendingCustomItem;
+      LAUNDRY_DATA.items[customKey] = finalItem;
       
       // Always add to Custom Items category
       if (!QUICK_ADD_CATEGORIES['Custom Items']) {
         QUICK_ADD_CATEGORIES['Custom Items'] = [];
       }
-      if (!QUICK_ADD_CATEGORIES['Custom Items'].includes(pendingCustomKey)) {
-        QUICK_ADD_CATEGORIES['Custom Items'].push(pendingCustomKey);
+      if (!QUICK_ADD_CATEGORIES['Custom Items'].includes(customKey)) {
+        QUICK_ADD_CATEGORIES['Custom Items'].push(customKey);
       }
       
       // Smart Auto-Categorization: Check if item matches any SMART_CATEGORIES keywords
-      const itemName = pendingCustomItem.name.toLowerCase();
-      const itemSynonyms = (pendingCustomItem.synonyms || []).map(s => s.toLowerCase());
+      const itemName = finalItem.name.toLowerCase();
+      const itemSynonyms = (finalItem.synonyms || []).map(s => s.toLowerCase());
       const allSearchableText = [itemName, ...itemSynonyms].join(' ');
       
       for (const [categoryName, keywords] of Object.entries(SMART_CATEGORIES)) {
@@ -2927,8 +2733,8 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
         if (hasMatch) {
           // Add to this category in QUICK_ADD_CATEGORIES if it exists
           if (QUICK_ADD_CATEGORIES[categoryName]) {
-            if (!QUICK_ADD_CATEGORIES[categoryName].includes(pendingCustomKey)) {
-              QUICK_ADD_CATEGORIES[categoryName].push(pendingCustomKey);
+            if (!QUICK_ADD_CATEGORIES[categoryName].includes(customKey)) {
+              QUICK_ADD_CATEGORIES[categoryName].push(customKey);
             }
           }
         }
@@ -2943,7 +2749,7 @@ Your task: analyze the garment care tag and output ONLY a JSON object.
       renderChips();
       renderDatabaseTable();
       
-      alert(`${pendingCustomItem.name} saved successfully!`);
+      alert(`${finalItem.name} saved successfully!`);
     }
 
     // ========================================
